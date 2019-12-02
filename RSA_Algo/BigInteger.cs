@@ -32,7 +32,6 @@ namespace RSA_Algo
                 if (arr2.Length > i)
                 {
                     result[i] = arr1[i] + arr2[i];
-
                 }
                 else {
                     result[i] = arr1[i];
