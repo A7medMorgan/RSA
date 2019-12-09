@@ -101,7 +101,67 @@ namespace RSA_Algo
             Console.WriteLine();
         }
 
+        public static int [] MUL(int [] arr1,int [] arr2,int size)
+        {
+            int[] R, A, B, C, X1, X2, Y1, Y2, Sum_X, Sum_Y, Z, M, Dif, New_A, New_B, R1, R2;
+            R = new int[2 * size]; A = new int[ size]; C = new int[ size];
+            X1 = new int[size / 2]; X2 = new int[size / 2]; Y1 = new int[size / 2]; Y2 = new int[size / 2]; M = new int[size / 2]; Dif = new int[size / 2];
+            Sum_X = new int[size]; Sum_Y = new int[size];
+            if (size == 1) 
+            {
+                //R = new int[size];
+                int result= arr1[0] * arr2[0];
+                if (result > 9)
+                {
+                    R = new int[size + 1];
+                    R[1] = result % 10;
+                    R[0] = result / 10;
+                }
+                else {
+                    R = new int[size];
+                    R[0] = result;
 
+                }
+                return R;
+            
+            }
+            
+            for(int i=0;i<size;i++)
+            {
+                if(i<size/2)
+                {
+                    X1[i]=arr1[i];
+                    Y1[i] = arr2[i];
+                }
+                else
+                {
+                    X2[i]=arr2[i];
+                    Y1[i] = arr2[i];
+                }
+            }
+            A = MUL(X1,Y1,size/2);
+            C = MUL(X2, Y2, size / 2);
+            Sum_X = ADD(X1, X2,size/2);
+            Sum_Y = ADD(Y1, Y2, size / 2);
+            Z = MUL(Sum_X, Sum_Y, size);
+            M = ADD(A, C, size / 2);
+           B = SUB(Z, M, size / 2);
+           New_A = Append_Zeros(ref A, A.Length + size);
+           New_B = Append_Zeros(ref B, B.Length + (size/2));
+           R1 = ADD(New_A, New_B, size);
+           R = ADD(R1, C,size);
+            return R;
+        }
+
+        public static int[] Append_Zeros(ref int [] arr,int size)
+    {
+            int []R=new int [size];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                R[i] = arr[i];
+            }
+            return R;
+    }
 
     }
 }
