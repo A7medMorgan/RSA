@@ -12,6 +12,7 @@ namespace RSA_Algo
         {
 
             BigInteger big1 = new BigInteger();
+            File f1 = new File();
 
 
             //string s1 = "1242468682113840180763850624340867898830637122775434796573473991466933960634085363735808574823872230131509619596260435331836866582052453403290874467870290043697815376935298110895904163169442926407335197820883439691250684070655002714487685888";
@@ -36,6 +37,18 @@ namespace RSA_Algo
             //  big2.Display();
 
             //  BigInteger.Display(BigInteger.Add(big1.pub_arr, big2.pub_arr));
+
+            string[] lines = File.readFromFile(File.file);
+
+            // Display the file contents by using a foreach loop.
+            Console.WriteLine("Contents of WriteLines2.txt = ");
+            foreach (string line in lines)
+            {
+                // Use a tab to indent each line of the file.
+                Console.WriteLine("\t" + line);
+            }
+
+            File.writeToFile(File.file1,lines);
         }
     }
 }
