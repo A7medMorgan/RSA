@@ -29,6 +29,9 @@ namespace RSA_Algo
             // big1.Display();
            
             
+
+
+
             //string[] lines = File.readFromFile(File.file);
 
             //// Display the file contents by using a foreach loop.
