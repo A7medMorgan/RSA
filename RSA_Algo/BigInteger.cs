@@ -109,7 +109,7 @@ namespace RSA_Algo
             Sum_X = new int[size]; Sum_Y = new int[size];
             if (size == 1) 
             {
-                //R = new int[size];
+                R = new int[size];
                 int result= arr1[0] * arr2[0];
                 if (result > 9)
                 {
@@ -135,10 +135,11 @@ namespace RSA_Algo
                 }
                 else
                 {
-                    X2[i]=arr2[i];
-                    Y1[i] = arr2[i];
+                    X2[i-1]=arr2[i];
+                    Y2[i-1] = arr2[i];
                 }
             }
+            
             A = MUL(X1,Y1,size/2);
             C = MUL(X2, Y2, size / 2);
             Sum_X = ADD(X1, X2,size/2);
