@@ -19,14 +19,14 @@ namespace RSA_Algo
             //string s2 = "417545487977981564551173186152102228498479694796653351848954185997611243506278579601980980219484255929864359810447039931";
             
             
-            string s1 = "15", s2 = "15";
-            int size=BigInteger.makeEqualLength(ref s1,ref s2);
-            Console.WriteLine(s1 +"\n"+s2);
-            int[] arr1 = BigInteger.convert_CharArr_IntArr(s1.ToCharArray());
-            int[] arr2 = BigInteger.convert_CharArr_IntArr(s2.ToCharArray());
-            big1.pub_arr = BigInteger.MUL(arr1,arr2,size);
+            //string s1 = "15", s2 = "15";
+            //int size=BigInteger.makeEqualLength(ref s1,ref s2);
+            //Console.WriteLine(s1 +"\n"+s2);
+            //int[] arr1 = BigInteger.convert_CharArr_IntArr(s1.ToCharArray());
+            //int[] arr2 = BigInteger.convert_CharArr_IntArr(s2.ToCharArray());
+            //big1.pub_arr = BigInteger.ADD(arr1,arr2,size);
 
-             big1.Display();
+            // big1.Display();
            
             
             //string[] lines = File.readFromFile(File.file);
