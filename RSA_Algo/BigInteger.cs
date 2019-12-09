@@ -8,13 +8,14 @@ namespace RSA_Algo
 {
     class BigInteger
     {
+        // int s = (int)s1[0] - '0';
         //:public
         public string text;
         public int[] pub_arr;
         //:private
         
 
-        public static int[] convert(char [] ch_arr)
+        public static int[] convert_CharArr_IntArr(char [] ch_arr)
         {
            int [] int_arr = new int[ch_arr.Length]; // O(1)
             for (int i = 0; i < int_arr.Length; i++) // O(N)
@@ -26,144 +27,59 @@ namespace RSA_Algo
             }
             return int_arr;
         }
-        // must arr1 be >= arr2
-        //public static int[] Add(int[] arr1, int[] arr2)
-        //{
-        //    int size;
-        //    int[] R;
-        //    int r=0;
-        //    int sub;
-        //    bool carry = false;
-        // //   if (arr1.Length > arr2.Length)
-        // //   {
-        //        R = new int[arr1.Length + 1];
-        //        size = arr1.Length;
-        //        sub = arr1.Length - arr2.Length;
-        //    //   }
-        //    //else {
-        //    //    R = new int[arr2.Length + 1];
-        //    //    size = arr2.Length;
-        //    //    sub = arr1.Length - arr2.Length;
-        //    //}
-        //    for (int i = size - 1; i >= 0; i--)
-        //    {
-
-        //        if (carry) { r += 1; carry = false; }
-        //        if (i - 1 == -1) { r += arr1[i]; }
-        //        else
-        //        {
-        //            r += arr1[i] + arr2[i - sub];
-
-        //        }
-        //        if (r > 9) carry = true;
-        //        r = r % 10;
-        //        R[i + 1] = r;
-
-        //        r = 0;
-
-        //    }
-        //    return R;
-        //}
-
-        public static int[] ADD(int[] arr1, int[] arr2)
+        public static int makeEqualLength(ref string str1,ref string str2)
         {
-            int size;
-            int[] R, Demo;
-            int r = 0;
-            int sub;
-            bool carry = false;
-            if (arr1.Length > arr2.Length)
+            int len1 = str1.Length;
+            int len2 = str2.Length;
+            if (len1 < len2)
             {
-                size = arr1.Length;
-                Demo = new int[size];
-                sub = arr1.Length - arr2.Length;
-                for (int i = size - 1; i >= 0; i--)
-                {
-                    if (i - sub != -1)
-                        Demo[i] = arr2[i - sub];
-                    else break;
-                }
-                R = new int[arr1.Length + 1];
+                for (int i = 0; i < len2 - len1; i++)
+                    str1 = '0' + str1;
+                return len2;
             }
-            else
+            else if (len1 > len2)
             {
-                size = arr2.Length;
-                Demo = new int[size];
-                sub = arr2.Length - arr1.Length;
-                for (int i = size - 1; i >= 0; i--)
-                {
-                    if (i - sub != -1)
-                        Demo[i] = arr1[i - sub];
-                    else break;
-                }
-                R = new int[arr2.Length + 1];
+                for (int i = 0; i < len1 - len2; i++)
+                    str2 = '0' + str2;
             }
+            return len1; // If len1 >= len2 
+        }
+
+        public static int[] ADD(int[] arr1, int[] arr2,int size)
+        {
+            int[] R;
+            int result = 0;
+            bool carry_flag = false;
+
+            R = new int[size+ 1];
             for (int i = size - 1; i >= 0; i--)
             {
-                if (carry) { r += 1; carry = false; }
-                if (arr1.Length > arr2.Length)
-                r += arr1[i] + Demo[i];
-                else
-                    r += Demo[i] +arr2[i];
+                if (carry_flag) { result += 1; carry_flag = false; }
+                result += arr1[i] + arr2[i];
+                if (result > 9) carry_flag = true;
+            result = result % 10;
+            R[i + 1] = result;
 
-                if (r > 9) carry = true;
-            r = r % 10;
-            R[i + 1] = r;
-
-            r = 0;
-        }
-            if (carry) R[0] = 1;
-
+            result = 0;
+            }
+            if (carry_flag) R[0] = 1;
             return R;
         }
 
-        public static int[] SUB(int[] arr1, int[] arr2)
+        public static int[] SUB(int[] arr1, int[] arr2,int size)// arr1 -arr2 only???
         {
-            int size;
-            int[] R, Demo;
-            int r = 0;
-            int sub;
-            int carry = 0;
-            if (arr1.Length > arr2.Length)
-            {
-                size = arr1.Length;
-                Demo = new int[size];
-                sub = arr1.Length - arr2.Length;
-                for (int i = size - 1; i >= 0; i--)
-                {
-                    if (i - sub != -1)
-                        Demo[i] = arr2[i - sub];
-                    else break;
-                }
-                R = new int[arr1.Length + 1];
-            }
-            else
-            {
-                size = arr2.Length;
-                Demo = new int[size];
-                sub = arr2.Length - arr1.Length;
-                for (int i = size - 1; i >= 0; i--)
-                {
-                    if (i - sub != -1)
-                        Demo[i] = arr1[i - sub];
-                    else break;
-                }
-                R = new int[arr2.Length + 1];
-            }
-            BigInteger.Display(Demo);
+            int[] R;
+            int result = 0;
+            int carry_Amout = 0;
+                R = new int[size];
             for (int i = size - 1; i >= 0; i--)
             {
-               // if (carry==1) { r += 1; carry = 0; }
-                if (arr1.Length > arr2.Length)
-                    r = arr1[i] - Demo[i] -carry;
-                else
-                    r = Demo[i] - arr2[i] -carry;
-
-                if (r < 0) { r += 10; carry = 1; }
-                else carry = 0;
+                    result = arr1[i] - arr2[i] -carry_Amout;
+                if (result < 0) { result += 10; carry_Amout = 1; }
+                else carry_Amout = 0;
                // r = r % 10;
-                R[i + 1] = r;
-                r = 0;
+                R[i] = result;
+                result = 0;
             }
             return R;
         }
@@ -184,6 +100,7 @@ namespace RSA_Algo
             Console.WriteLine();
             Console.WriteLine();
         }
+
 
 
     }
