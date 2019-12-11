@@ -10,25 +10,45 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
+            string s1 = "377773935827991229645029714898969028";
+            string s2 = "301174256660595384532197942652815288956047581636";
+            int[] arr1 = BigInteger.convert_CharArr_IntArr(s1.ToCharArray());
+            int[] arr2 = BigInteger.convert_CharArr_IntArr(s2.ToCharArray());
+            int []arr= BigInteger.Multiply_Morgan(arr1, arr2);
+            foreach (int i in arr)
+            {
+                Console.Write(i);
+            }
+            Console.WriteLine("\n" + arr.Length);
 
-            BigInteger big1 = new BigInteger();
-            File f1 = new File();
 
 
-            //string s1 = "1242468682113840180763850624340867898830637122775434796573473991466933960634085363735808574823872230131509619596260435331836866582052453403290874467870290043697815376935298110895904163169442926407335197820883439691250684070655002714487685888";
-            //string s2 = "417545487977981564551173186152102228498479694796653351848954185997611243506278579601980980219484255929864359810447039931";
-            
-            
-            //string s1 = "15", s2 = "15";
-            //int size=BigInteger.makeEqualLength(ref s1,ref s2);
-            //Console.WriteLine(s1 +"\n"+s2);
-            //int[] arr1 = BigInteger.convert_CharArr_IntArr(s1.ToCharArray());
-            //int[] arr2 = BigInteger.convert_CharArr_IntArr(s2.ToCharArray());
-            //big1.pub_arr = BigInteger.ADD(arr1,arr2,size);
+
+            //int size = BigInteger.Even_Length(ref arr);
+            //int[] x1, x2;
+            //x1 = new int[size];
+            //x2 = new int[size];
+            //Console.WriteLine(arr.Length);
+            //BigInteger.Divide_into2Array(ref x1, ref x2, ref arr, size);
+            //// BigInteger.Add_Zero_onLeft(ref arr);
+            //Array.Reverse(arr);
+            //Console.WriteLine(arr[0] + " " + arr[1] + " " + arr.Length);
+            //Console.WriteLine(x1[0] + " " + x2[0] + " " + x1[1] + " " + x2[1]);
+
+            //BigInteger big1 = new BigInteger();
+            //File f1 = new File();
+
+           
+
+            ////string s1 = "15", s2 = "15";
+            //BigInteger.makeEqualLength(ref s1,ref s2);
+            ////Console.WriteLine(s1 +"\n"+s2);
+           
+            //big1.pub_arr = BigInteger.ADD(arr1,arr2);
 
             // big1.Display();
-           
-            
+
+
 
 
 

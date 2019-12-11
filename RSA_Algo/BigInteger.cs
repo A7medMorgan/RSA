@@ -31,6 +31,7 @@ namespace RSA_Algo
         {
             int len1 = str1.Length;
             int len2 = str2.Length;
+
             if (len1 < len2)
             {
                 for (int i = 0; i < len2 - len1; i++) //O(N)
@@ -45,9 +46,10 @@ namespace RSA_Algo
             return len1; // If len1 >= len2 
         }
 
-        public static int[] ADD(int[] arr1, int[] arr2,int size)   //O(N)
+        public static int[] ADD(int[] arr1, int[] arr2)   //O(N)
         {
             int[] R;        // O(1)
+            int size = arr1.Length;
             int result = 0;    // O(1)
             bool carry_flag = false;  // O(1)
 
@@ -66,9 +68,10 @@ namespace RSA_Algo
         }
 
         // arr1 -arr2 only???
-        public static int[] SUB(int[] arr1, int[] arr2,int size)   //O(N)
+        public static int[] SUB(int[] arr1, int[] arr2)   //O(N)
         {
             int[] R;   //O(1)
+            int size = arr1.Length;
             int result = 0;  //O(1)
             int carry_Amout = 0;    //O(1)
             R = new int[size];    //O(1)
@@ -101,68 +104,196 @@ namespace RSA_Algo
             Console.WriteLine();
         }
 
-        public static int [] MUL(int [] arr1,int [] arr2,int size)
-        {
-            int[] R, A, B, C, X1, X2, Y1, Y2, Sum_X, Sum_Y, Z, M, Dif, New_A, New_B, R1, R2;
-            R = new int[2 * size]; A = new int[ size]; C = new int[ size];
-            X1 = new int[size / 2]; X2 = new int[size / 2]; Y1 = new int[size / 2]; Y2 = new int[size / 2]; M = new int[size / 2]; Dif = new int[size / 2];
-            Sum_X = new int[size]; Sum_Y = new int[size];
-            if (size == 1) 
-            {
-                R = new int[size];
-                int result= arr1[0] * arr2[0];
-                if (result > 9)
-                {
-                    R = new int[size + 1];
-                    R[1] = result % 10;
-                    R[0] = result / 10;
-                }
-                else {
-                    R = new int[size];
-                    R[0] = result;
+        //public static int [] MUL(int [] arr1,int [] arr2,int size)
+        //{
+        //    int[] R, A, B, C, X1, X2, Y1, Y2, Sum_X, Sum_Y, Z, M, Dif, New_A, New_B, R1, R2;
+        //    R = new int[2 * size]; A = new int[ size]; C = new int[ size];
+        //    X1 = new int[size / 2]; X2 = new int[size / 2]; Y1 = new int[size / 2]; Y2 = new int[size / 2]; M = new int[size / 2]; Dif = new int[size / 2];
+        //    Sum_X = new int[size]; Sum_Y = new int[size];
+        //    if (size == 1) 
+        //    {
+        //        R = new int[size];
+        //        int result= arr1[0] * arr2[0];
+        //        if (result > 9)
+        //        {
+        //            R = new int[size + 1];
+        //            R[1] = result % 10;
+        //            R[0] = result / 10;
+        //        }
+        //        else {
+        //            R = new int[size];
+        //            R[0] = result;
 
-                }
-                return R;
+        //        }
+        //        return R;
             
-            }
+        //    }
             
-            for(int i=0;i<size;i++)
+        //    for(int i=0;i<size;i++)
+        //    {
+        //        if(i<size/2)
+        //        {
+        //            X1[i]=arr1[i];
+        //            Y1[i] = arr2[i];
+        //        }
+        //        else
+        //        {
+        //            X2[i-1]=arr2[i];
+        //            Y2[i-1] = arr2[i];
+        //        }
+        //    }
+            
+        //    A = MUL(X1,Y1,size/2);
+        //    C = MUL(X2, Y2, size / 2);
+        //    Sum_X = ADD(X1, X2,size/2);
+        //    Sum_Y = ADD(Y1, Y2, size / 2);
+        //    Z = MUL(Sum_X, Sum_Y, size);
+        //    M = ADD(A, C, size / 2);
+        //   B = SUB(Z, M, size / 2);
+        //   New_A = Append_Zeros(ref A, A.Length + size);
+        //   New_B = Append_Zeros(ref B, B.Length + (size/2));
+        //   R1 = ADD(New_A, New_B, size);
+        //   R = ADD(R1, C,size);
+        //    return R;
+        //}
+
+        public static int[] Multiply_Morgan(int[] X, int[] Y)  // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
+        {
+            int[] Failed = { 0 };
+            int size_of_sub_prob,N;
+            // 10^n[A]+[C]+[B]10^n/2   // Karatsuba Multiplication
+            int[] A // [X1Y1]
+                , C // [X2Y2]
+                , B // Z-(A+C)
+                , Z, Zx, Zy// [X1+X2][Y1+Y2]
+                , AC;
+              int a,c,b,z,result;
+                int[] x1, x2
+                , y1, y2;
+
+            Make_Equle(ref X, ref Y);  // make Equle length
+
+            int x_size = Even_Length(ref X); // check if has even length of Divide equal
+            int y_size = Even_Length(ref Y); // ~
+           N = X.Length; // set N
+
+            if (x_size == y_size) size_of_sub_prob = x_size;
+            else {  return Failed;  }
+
+            x1 = new int[size_of_sub_prob];
+            x2 = new int[size_of_sub_prob];
+            y1 = new int[size_of_sub_prob];
+            y2 = new int[size_of_sub_prob];
+
+            Divide_into2Array(ref x1,ref x2,ref X,size_of_sub_prob);
+            Divide_into2Array(ref y1,ref y2,ref Y,size_of_sub_prob);
+            if (N == 2)  //Base Case
             {
-                if(i<size/2)
+                a = x1[0] * y1[0];
+                c = x2[0] * y2[0];
+                z = (x1[0] + x2[0]) * (y1[0] + y2[0]);
+                b = z - (a + c);
+
+                result = (a * Ten_power(2)) + c + (b * Ten_power(1));
+                string Res=result.ToString();
+               return convert_CharArr_IntArr(Res.ToCharArray());
+
+            }  // Divide And Conqure
+
+            A = Multiply_Morgan(x1, y1);
+            C = Multiply_Morgan(x2, y2);
+            //Make_Equle(ref x1, ref x2);
+            //Zx = ADD(x1, x2);
+            //Make_Equle(ref y1, ref y2);
+            //Zy = ADD(y1, y2);
+            ////Even_Length(ref Zx);
+            ////Even_Length(ref Zy);
+            //Z = Multiply_Morgan(Zx, Zy);
+            //// B = SUB(Z, ADD(A, C));
+            //Make_Equle(ref A,ref C);
+            //AC = ADD(A, C);
+            //Make_Equle(ref Z,ref AC);
+            //B = SUB(Z,AC);
+            
+            Zx = Multiply_Morgan(x1, y2);  //  ضرب المقصين
+            Zy = Multiply_Morgan(x2, y1);
+            Make_Equle(ref Zx, ref Zy);
+            Z = ADD(Zx, Zy);
+
+            // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
+
+            Append_Zeros(ref A, N);  // A 10^N
+            Append_Zeros(ref Z, N / 2); // B 10^N/2
+
+            Make_Equle(ref A, ref C);
+            AC = ADD(A, C);
+            Make_Equle(ref AC,ref Z);
+            return ADD(AC, Z);
+            
+            //return Failed;
+        }
+        public static void Make_Equle(ref int[] X, ref int[] Y)
+        {
+            if (X.Length != Y.Length)
+            {
+                if (X.Length > Y.Length)
                 {
-                    X1[i]=arr1[i];
-                    Y1[i] = arr2[i];
+                    Add_Zero_onLeft(ref Y, X.Length - Y.Length);
                 }
                 else
                 {
-                    X2[i-1]=arr2[i];
-                    Y2[i-1] = arr2[i];
+                    Add_Zero_onLeft(ref X, Y.Length - X.Length);
                 }
             }
-            
-            A = MUL(X1,Y1,size/2);
-            C = MUL(X2, Y2, size / 2);
-            Sum_X = ADD(X1, X2,size/2);
-            Sum_Y = ADD(Y1, Y2, size / 2);
-            Z = MUL(Sum_X, Sum_Y, size);
-            M = ADD(A, C, size / 2);
-           B = SUB(Z, M, size / 2);
-           New_A = Append_Zeros(ref A, A.Length + size);
-           New_B = Append_Zeros(ref B, B.Length + (size/2));
-           R1 = ADD(New_A, New_B, size);
-           R = ADD(R1, C,size);
-            return R;
         }
-
-        public static int[] Append_Zeros(ref int [] arr,int size)
+        public static int Even_Length(ref int[] X)
+        {
+            int size;
+            if (X.Length % 2 == 0) { }
+            else { Add_Zero_onLeft(ref X,1); }
+            size = X.Length / 2;
+            return size;
+        }
+        public static void Divide_into2Array(ref int[] X1,ref int []X2,ref int [] X ,int size)
+        {
+            for (int i = 0; i < X.Length; i++)
+            {
+                if (i < size)
+                {
+                    X1[i] = X[i];
+                }
+                else {
+                    X2[i - size] = X[i];
+                }
+            }
+        }
+        public static void Append_Zeros(ref int [] arr,int size)   //10^n
     {
-            int []R=new int [size];
+            int []R=new int [arr.Length+size];
             for (int i = 0; i < arr.Length; i++)
             {
                 R[i] = arr[i];
             }
-            return R;
+            //  return R;
+            arr = R;
     }
 
+        public static void Add_Zero_onLeft(ref int[] arr ,int N_Zeros)
+        {
+            int[] R = new int[arr.Length+N_Zeros];  // arr.Length + 1  Default
+            for (int i = 0; i < arr.Length; i++)
+            {
+                R[i+N_Zeros] = arr[i];  // shift number of zeros
+            }
+            arr = R;
+        }
+
+        public static int Ten_power(int N)
+        {
+            if (N == 0) return 1;
+            else
+                return 10*Ten_power(N - 1);
+        
+        }
 }
 }
