@@ -14,7 +14,6 @@ namespace RSA_Algo
         public int[] pub_arr;
         //:private
         
-
         public static int[] convert_CharArr_IntArr(char [] ch_arr) //O(N)
         {
            int [] int_arr = new int[ch_arr.Length]; // O(1)
@@ -48,7 +47,7 @@ namespace RSA_Algo
 
         public static int[] ADD(int[] arr1, int[] arr2)   //O(N)
         {
-            int[] R;        // O(1)
+            int[] R,R_NoCarry;        // O(1)
             int size = arr1.Length;
             int result = 0;    // O(1)
             bool carry_flag = false;  // O(1)
@@ -64,6 +63,14 @@ namespace RSA_Algo
                 result = 0;   // O(1)
             }
             if (carry_flag) R[0] = 1;   // O(1)
+            else {
+                R_NoCarry = new int[size];
+                for (int i=size-1;i>=0;i--)
+                {
+                    R_NoCarry[i] = R[i+1];
+                }
+                return R_NoCarry;
+            }
             return R;   // O(1)
         }
 
@@ -202,23 +209,23 @@ namespace RSA_Algo
 
             A = Multiply_Morgan(x1, y1);
             C = Multiply_Morgan(x2, y2);
-            //Make_Equle(ref x1, ref x2);
-            //Zx = ADD(x1, x2);
-            //Make_Equle(ref y1, ref y2);
-            //Zy = ADD(y1, y2);
-            ////Even_Length(ref Zx);
-            ////Even_Length(ref Zy);
-            //Z = Multiply_Morgan(Zx, Zy);
-            //// B = SUB(Z, ADD(A, C));
-            //Make_Equle(ref A,ref C);
-            //AC = ADD(A, C);
-            //Make_Equle(ref Z,ref AC);
-            //B = SUB(Z,AC);
-            
-            Zx = Multiply_Morgan(x1, y2);  //  ضرب المقصين
-            Zy = Multiply_Morgan(x2, y1);
-            Make_Equle(ref Zx, ref Zy);
-            Z = ADD(Zx, Zy);
+            Make_Equle(ref x1, ref x2);
+            Zx = ADD(x1, x2);
+            Make_Equle(ref y1, ref y2);
+            Zy = ADD(y1, y2);
+            //Even_Length(ref Zx);
+            //Even_Length(ref Zy);
+            Z = Multiply_Morgan(Zx, Zy);
+            // B = SUB(Z, ADD(A, C));
+            Make_Equle(ref A, ref C);
+            AC = ADD(A, C);
+            Make_Equle(ref Z, ref AC);
+            B = SUB(Z, AC);
+
+            //Zx = Multiply_Morgan(x1, y2);  //  ضرب المقصين
+            //Zy = Multiply_Morgan(x2, y1);
+            //Make_Equle(ref Zx, ref Zy);
+            //Z = ADD(Zx, Zy);
 
             // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
 
@@ -227,8 +234,8 @@ namespace RSA_Algo
 
             Make_Equle(ref A, ref C);
             AC = ADD(A, C);
-            Make_Equle(ref AC,ref Z);
-            return ADD(AC, Z);
+            Make_Equle(ref AC,ref B);
+            return ADD(AC, B);
             
             //return Failed;
         }

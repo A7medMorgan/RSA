@@ -10,10 +10,11 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-            string s1 = "377773935827991229645029714898969028";
-            string s2 = "301174256660595384532197942652815288956047581636";
+            string s1 = "9000";
+            string s2 = "3";
             int[] arr1 = BigInteger.convert_CharArr_IntArr(s1.ToCharArray());
             int[] arr2 = BigInteger.convert_CharArr_IntArr(s2.ToCharArray());
+            BigInteger.Make_Equle(ref arr1,ref arr2);
             int []arr= BigInteger.Multiply_Morgan(arr1, arr2);
             foreach (int i in arr)
             {
