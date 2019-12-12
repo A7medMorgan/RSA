@@ -79,61 +79,61 @@ namespace RSA_Algo
             Console.WriteLine();
         }
 
-        public static int[] Multiply(int[] X, int[] Y)  // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
+        public static int[] Multiply(int[] X, int[] Y)    //T(N)=3T(N/2)+O(N)    Master Method  case 1     F(n)=O(N)    g(x)=N^log3 base(2)
+                                                         //Complexity  ==  O(N^1.59)
         {
-            int[] Failed = { 0 };
-            int size_of_sub_prob,N;
-            // 10^n[A]+[C]+[B]10^n/2   // Karatsuba Multiplication
+                      // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
+            int[] Failed = { 0 }; //O(1)
+            int size_of_sub_prob,N; //O(1)
+            // 10^n[A]+[C]+[B]10^n/2                              // Karatsuba Multiplication
             int[] A // [X1Y1]
                 , C // [X2Y2]
                 , B // Z-(A+C)
                 , Z, Zx, Zy// [X1+X2][Y1+Y2]
-                , AC;
-              int a,c,b,z,result;
-                int[] x1, x2
-                , y1, y2;
-            int [] Q={0};
-            Make_Equle(ref X, ref Y);  // make Equle length
-            int x_size = Even_Length(ref X); // check if has even length of Divide equal
-            int y_size = Even_Length(ref Y); // ~
-           N = X.Length; // set N
+                , AC;                                   //O(1)
+            int a,c,b,z,result;    //O(1)
+            int[] x1, x2
+                , y1, y2;      //O(1)
+            Make_Equle(ref X, ref Y);  // make Equle length         O(N)
+            int x_size = Even_Length(ref X); // check if has even length of Divide equal      //O(N)
+            int y_size = Even_Length(ref Y); // ~      //O(N)
+           N = X.Length; // set N    O(1)
 
-            if (x_size == y_size) size_of_sub_prob = x_size;
-            else {  return Failed;  }
+            if (x_size == y_size) size_of_sub_prob = x_size; //O(1)
+            else {  return Failed; }   //O(1)
 
-            x1 = new int[size_of_sub_prob];
-            x2 = new int[size_of_sub_prob];
-            y1 = new int[size_of_sub_prob];
-            y2 = new int[size_of_sub_prob];
+            x1 = new int[size_of_sub_prob];    //O(1)
+            x2 = new int[size_of_sub_prob];    //O(1)
+            y1 = new int[size_of_sub_prob];   //O(N)
+            y2 = new int[size_of_sub_prob];    //O(N)
 
-            Divide_into2Array(ref x1,ref x2,ref X,size_of_sub_prob);
-            Divide_into2Array(ref y1,ref y2,ref Y,size_of_sub_prob);
-            if (N == 0) return Q;
-            if (N == 2)  //Base Case
+            Divide_into2Array(ref x1,ref x2,ref X,size_of_sub_prob);   //O(N)
+            Divide_into2Array(ref y1,ref y2,ref Y,size_of_sub_prob);    //O(N)
+            if (N == 2)  //Base Case     //O()
             {
                 a = x1[0] * y1[0];
                 c = x2[0] * y2[0];
                 z = (x1[0] + x2[0]) * (y1[0] + y2[0]);
                 b = z - (a + c);
 
-                result = (a * Ten_power(2)) + c + (b * Ten_power(1));
-                string Res=result.ToString();
-               return convert_CharArr_IntArr(Res.ToCharArray());
+                result = (a * Ten_power(2)) + c + (b * Ten_power(1));  //O(N)
+                string Res=result.ToString();  //O(1)
+               return convert_CharArr_IntArr(Res.ToCharArray());   //O(N)*O(1) =O(N)
 
             }  // Divide And Conqure
 
-            A = Multiply(x1, y1);
+            A = Multiply(x1, y1);  
             C = Multiply(x2, y2);
-            Make_Equle(ref x1, ref x2);
-            Zx = ADD(x1, x2);
-            Make_Equle(ref y1, ref y2);
-            Zy = ADD(y1, y2);
+            Make_Equle(ref x1, ref x2);   //O(N)
+            Zx = ADD(x1, x2);  //O(N)
+            Make_Equle(ref y1, ref y2);  //O(N)
+            Zy = ADD(y1, y2);  //O(N)
             Z = Multiply(Zx, Zy);
-            // B = SUB(Z, ADD(A, C));
-            Make_Equle(ref A, ref C);
-            AC = ADD(A, C);
-            Make_Equle(ref Z, ref AC);
-            B = SUB(Z, AC);
+                                       // B = SUB(Z, ADD(A, C));
+            Make_Equle(ref A, ref C);  //O(N)
+            AC = ADD(A, C);   //O(N)
+            Make_Equle(ref Z, ref AC);  //O(N)
+            B = SUB(Z, AC);  //O(N)
 
             //Zx = Multiply_Morgan(x1, y2);  // X1*Y2  + X2*Y1
             //Zy = Multiply_Morgan(x2, y1);
@@ -142,17 +142,17 @@ namespace RSA_Algo
 
             // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
 
-            Append_Zeros(ref A, N);  // A 10^N
-            Append_Zeros(ref B, N / 2); // B 10^N/2
+            Append_Zeros(ref A, N);  // A 10^N          //O(N)
+            Append_Zeros(ref B, N / 2); // B 10^N/2       //O(N)
 
-            Make_Equle(ref A, ref C);
-            AC = ADD(A, C);
-            Make_Equle(ref AC,ref B);
-            return ADD(AC, B);
-            
+            Make_Equle(ref A, ref C);        //O(N)
+            AC = ADD(A, C);       //O(N)
+            Make_Equle(ref AC,ref B);       //O(N)
+            return ADD(AC, B);       //O(N)
+
             //return Failed;
         }
-        public static void Make_Equle(ref int[] X, ref int[] Y)
+        public static void Make_Equle(ref int[] X, ref int[] Y)    //O(N)
         {
             if (X.Length != Y.Length)
             {
@@ -166,7 +166,7 @@ namespace RSA_Algo
                 }
             }
         }
-        public static int Even_Length(ref int[] X)
+        public static int Even_Length(ref int[] X)  //O(N)
         {
             int size;
             if (X.Length % 2 == 0) { }
@@ -174,7 +174,7 @@ namespace RSA_Algo
             size = X.Length / 2;
             return size;
         }
-        public static void Divide_into2Array(ref int[] X1,ref int []X2,ref int [] X ,int size)
+        public static void Divide_into2Array(ref int[] X1,ref int []X2,ref int [] X ,int size)   //O(N)
         {
             for (int i = 0; i < X.Length; i++)
             {
@@ -187,8 +187,8 @@ namespace RSA_Algo
                 }
             }
         }
-        public static void Append_Zeros(ref int [] arr,int size)   //10^n
-    {
+        public static void Append_Zeros(ref int [] arr,int size)   //10^n   //O(N)
+        {
             int []R=new int [arr.Length+size];
             for (int i = 0; i < arr.Length; i++)
             {
@@ -198,7 +198,7 @@ namespace RSA_Algo
             arr = R;
     }
 
-        public static void Add_Zero_onLeft(ref int[] arr ,int N_Zeros)
+        public static void Add_Zero_onLeft(ref int[] arr ,int N_Zeros)   //O(N)
         {
             int[] R = new int[arr.Length+N_Zeros];  // arr.Length + 1  Default
             for (int i = 0; i < arr.Length; i++)
@@ -237,7 +237,7 @@ namespace RSA_Algo
             }
             return int_arr;
         }
-        public static int Ten_power(int N)
+        public static int Ten_power(int N)   //T(N)=T(N-1)+O(1)     // O(N)
         {
             if (N == 0) return 1;
             else
