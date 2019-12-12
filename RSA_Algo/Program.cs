@@ -10,8 +10,8 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-            string s1 = "9000";
-            string s2 = "3";
+            string s1 = "12120";
+            string s2 = "12340";
             int[] arr1 = BigInteger.convert_CharArr_IntArr(s1.ToCharArray());
             int[] arr2 = BigInteger.convert_CharArr_IntArr(s2.ToCharArray());
             BigInteger.Make_Equle(ref arr1,ref arr2);
@@ -21,7 +21,12 @@ namespace RSA_Algo
                 Console.Write(i);
             }
             Console.WriteLine("\n" + arr.Length);
-
+            arr = BigInteger.Mul(arr1, arr2);
+            foreach (int i in arr)
+            {
+                Console.Write(i);
+            }
+            Console.WriteLine("\n" + arr.Length);
 
 
 

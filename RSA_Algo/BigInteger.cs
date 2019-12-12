@@ -111,59 +111,6 @@ namespace RSA_Algo
             Console.WriteLine();
         }
 
-        //public static int [] MUL(int [] arr1,int [] arr2,int size)
-        //{
-        //    int[] R, A, B, C, X1, X2, Y1, Y2, Sum_X, Sum_Y, Z, M, Dif, New_A, New_B, R1, R2;
-        //    R = new int[2 * size]; A = new int[ size]; C = new int[ size];
-        //    X1 = new int[size / 2]; X2 = new int[size / 2]; Y1 = new int[size / 2]; Y2 = new int[size / 2]; M = new int[size / 2]; Dif = new int[size / 2];
-        //    Sum_X = new int[size]; Sum_Y = new int[size];
-        //    if (size == 1) 
-        //    {
-        //        R = new int[size];
-        //        int result= arr1[0] * arr2[0];
-        //        if (result > 9)
-        //        {
-        //            R = new int[size + 1];
-        //            R[1] = result % 10;
-        //            R[0] = result / 10;
-        //        }
-        //        else {
-        //            R = new int[size];
-        //            R[0] = result;
-
-        //        }
-        //        return R;
-            
-        //    }
-            
-        //    for(int i=0;i<size;i++)
-        //    {
-        //        if(i<size/2)
-        //        {
-        //            X1[i]=arr1[i];
-        //            Y1[i] = arr2[i];
-        //        }
-        //        else
-        //        {
-        //            X2[i-1]=arr2[i];
-        //            Y2[i-1] = arr2[i];
-        //        }
-        //    }
-            
-        //    A = MUL(X1,Y1,size/2);
-        //    C = MUL(X2, Y2, size / 2);
-        //    Sum_X = ADD(X1, X2,size/2);
-        //    Sum_Y = ADD(Y1, Y2, size / 2);
-        //    Z = MUL(Sum_X, Sum_Y, size);
-        //    M = ADD(A, C, size / 2);
-        //   B = SUB(Z, M, size / 2);
-        //   New_A = Append_Zeros(ref A, A.Length + size);
-        //   New_B = Append_Zeros(ref B, B.Length + (size/2));
-        //   R1 = ADD(New_A, New_B, size);
-        //   R = ADD(R1, C,size);
-        //    return R;
-        //}
-
         public static int[] Multiply_Morgan(int[] X, int[] Y)  // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
         {
             int[] Failed = { 0 };
@@ -177,7 +124,7 @@ namespace RSA_Algo
               int a,c,b,z,result;
                 int[] x1, x2
                 , y1, y2;
-
+            int [] Q={0};
             Make_Equle(ref X, ref Y);  // make Equle length
 
             int x_size = Even_Length(ref X); // check if has even length of Divide equal
@@ -194,6 +141,7 @@ namespace RSA_Algo
 
             Divide_into2Array(ref x1,ref x2,ref X,size_of_sub_prob);
             Divide_into2Array(ref y1,ref y2,ref Y,size_of_sub_prob);
+            if (N == 0) return Q;
             if (N == 2)  //Base Case
             {
                 a = x1[0] * y1[0];
@@ -301,6 +249,84 @@ namespace RSA_Algo
             else
                 return 10*Ten_power(N - 1);
         
+        }
+        public static int[] Mul(int[] X, int[] Y)  // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
+        {
+            int[] Failed = { 0 };
+            int size_of_sub_prob, N;
+            // 10^n[A]+[C]+[B]10^n/2   // Karatsuba Multiplication
+            int[] A // [X1Y1]
+                , C // [X2Y2]
+                , B // Z-(A+C)
+                , Z, Zx, Zy// [X1+X2][Y1+Y2]
+                , AC, D,
+                W;
+            int a, c, b, z, result;
+            int[] x1, x2
+            , y1, y2;
+
+            Make_Equle(ref X, ref Y);  // make Equle length
+
+            int x_size = Even_Length(ref X); // check if has even length of Divide equal
+            int y_size = Even_Length(ref Y); // ~
+            N = X.Length; // set N
+
+            if (x_size == y_size) size_of_sub_prob = x_size;
+            else { return Failed; }
+
+            x1 = new int[size_of_sub_prob];
+            x2 = new int[size_of_sub_prob];
+            y1 = new int[size_of_sub_prob];
+            y2 = new int[size_of_sub_prob];
+            // int [] Q={0};
+            Divide_into2Array(ref x1, ref x2, ref X, size_of_sub_prob);
+            Divide_into2Array(ref y1, ref y2, ref Y, size_of_sub_prob);
+           // if (N == 1) return Q;
+            if (N == 2)  //Base Case
+            {
+                a = x1[0] * y1[0];
+                c = x2[0] * y2[0];
+                z = (x1[0] + x2[0]) * (y1[0] + y2[0]);
+                b = z - (a + c);
+
+                result = (a * Ten_power(2)) + c + (b * Ten_power(1));
+                string Res = result.ToString();
+                return convert_CharArr_IntArr(Res.ToCharArray());
+
+            }  // Divide And Conqure
+
+            A = Mul(x1, y1);
+            C = Mul(x2, y2);
+            //Make_Equle(ref x1, ref x2);
+            //Zx = ADD(x1, x2);
+            //Make_Equle(ref y1, ref y2);
+            //Zy = ADD(y1, y2);
+            //Z = Multiply_Morgan(Zx, Zy);
+            //Make_Equle(ref A,ref C);
+            //AC = ADD(A, C);
+            //Make_Equle(ref Z,ref AC);
+            //B = SUB(Z,AC);
+            Make_Equle(ref x1, ref x2);
+            Zx = ADD(x1, x2);  //  ضرب المقصين
+            Make_Equle(ref y1, ref y2);
+            Zy = ADD(y1, y2);
+            Make_Equle(ref Zx, ref Zy);
+            Z = Mul(Zx, Zy);
+            Make_Equle(ref A, ref C);
+            W = ADD(A, C);
+            Make_Equle(ref Z, ref W);
+            D = SUB(Z, W);
+            // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
+
+            Append_Zeros(ref A, N);  // A 10^N
+            Append_Zeros(ref D, N / 2); // B 10^N/2
+
+            Make_Equle(ref A, ref C);
+            AC = ADD(A, C);
+            Make_Equle(ref AC, ref D);
+            return ADD(AC, D);
+
+            //return Failed;
         }
 }
 }
