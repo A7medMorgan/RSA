@@ -13,38 +13,6 @@ namespace RSA_Algo
         public string text;
         public int[] pub_arr;
         //:private
-        
-        public static int[] convert_CharArr_IntArr(char [] ch_arr) //O(N)
-        {
-           int [] int_arr = new int[ch_arr.Length]; // O(1)
-            for (int i = 0; i < int_arr.Length; i++) // O(N)
-            {
-                //int_arr[i] = Convert.ToInt32(ch_arr[i
-                string s= ch_arr[i].ToString();
-               int_arr[i] = Int32.Parse(s);
-
-            }
-            return int_arr;
-        }
-        public static int makeEqualLength(ref string str1,ref string str2)
-        {
-            int len1 = str1.Length;
-            int len2 = str2.Length;
-
-            if (len1 < len2)
-            {
-                for (int i = 0; i < len2 - len1; i++) //O(N)
-                    str1 = '0' + str1;
-                return len2;
-            }
-            else if (len1 > len2)   
-            {
-                for (int i = 0; i < len1 - len2; i++)   //O(N)
-                    str2 = '0' + str2;
-            }
-            return len1; // If len1 >= len2 
-        }
-
         public static int[] ADD(int[] arr1, int[] arr2)   //O(N)
         {
             int[] R,R_NoCarry;        // O(1)
@@ -111,7 +79,7 @@ namespace RSA_Algo
             Console.WriteLine();
         }
 
-        public static int[] Multiply_Morgan(int[] X, int[] Y)  // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
+        public static int[] Multiply(int[] X, int[] Y)  // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
         {
             int[] Failed = { 0 };
             int size_of_sub_prob,N;
@@ -126,7 +94,6 @@ namespace RSA_Algo
                 , y1, y2;
             int [] Q={0};
             Make_Equle(ref X, ref Y);  // make Equle length
-
             int x_size = Even_Length(ref X); // check if has even length of Divide equal
             int y_size = Even_Length(ref Y); // ~
            N = X.Length; // set N
@@ -155,22 +122,20 @@ namespace RSA_Algo
 
             }  // Divide And Conqure
 
-            A = Multiply_Morgan(x1, y1);
-            C = Multiply_Morgan(x2, y2);
+            A = Multiply(x1, y1);
+            C = Multiply(x2, y2);
             Make_Equle(ref x1, ref x2);
             Zx = ADD(x1, x2);
             Make_Equle(ref y1, ref y2);
             Zy = ADD(y1, y2);
-            //Even_Length(ref Zx);
-            //Even_Length(ref Zy);
-            Z = Multiply_Morgan(Zx, Zy);
+            Z = Multiply(Zx, Zy);
             // B = SUB(Z, ADD(A, C));
             Make_Equle(ref A, ref C);
             AC = ADD(A, C);
             Make_Equle(ref Z, ref AC);
             B = SUB(Z, AC);
 
-            //Zx = Multiply_Morgan(x1, y2);  //  ضرب المقصين
+            //Zx = Multiply_Morgan(x1, y2);  // X1*Y2  + X2*Y1
             //Zy = Multiply_Morgan(x2, y1);
             //Make_Equle(ref Zx, ref Zy);
             //Z = ADD(Zx, Zy);
@@ -178,7 +143,7 @@ namespace RSA_Algo
             // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
 
             Append_Zeros(ref A, N);  // A 10^N
-            Append_Zeros(ref Z, N / 2); // B 10^N/2
+            Append_Zeros(ref B, N / 2); // B 10^N/2
 
             Make_Equle(ref A, ref C);
             AC = ADD(A, C);
@@ -242,91 +207,42 @@ namespace RSA_Algo
             }
             arr = R;
         }
+        public static int makeEqualLength(ref string str1, ref string str2)
+        {
+            int len1 = str1.Length;
+            int len2 = str2.Length;
 
+            if (len1 < len2)
+            {
+                for (int i = 0; i < len2 - len1; i++) //O(N)
+                    str1 = '0' + str1;
+                return len2;
+            }
+            else if (len1 > len2)
+            {
+                for (int i = 0; i < len1 - len2; i++)   //O(N)
+                    str2 = '0' + str2;
+            }
+            return len1; // If len1 >= len2 
+        }
+        public static int[] convert_CharArr_IntArr(char[] ch_arr) //O(N)
+        {
+            int[] int_arr = new int[ch_arr.Length]; // O(1)
+            for (int i = 0; i < int_arr.Length; i++) // O(N)
+            {
+                //int_arr[i] = Convert.ToInt32(ch_arr[i
+                string s = ch_arr[i].ToString();
+                int_arr[i] = Int32.Parse(s);
+
+            }
+            return int_arr;
+        }
         public static int Ten_power(int N)
         {
             if (N == 0) return 1;
             else
                 return 10*Ten_power(N - 1);
         
-        }
-        public static int[] Mul(int[] X, int[] Y)  // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
-        {
-            int[] Failed = { 0 };
-            int size_of_sub_prob, N;
-            // 10^n[A]+[C]+[B]10^n/2   // Karatsuba Multiplication
-            int[] A // [X1Y1]
-                , C // [X2Y2]
-                , B // Z-(A+C)
-                , Z, Zx, Zy// [X1+X2][Y1+Y2]
-                , AC, D,
-                W;
-            int a, c, b, z, result;
-            int[] x1, x2
-            , y1, y2;
-
-            Make_Equle(ref X, ref Y);  // make Equle length
-
-            int x_size = Even_Length(ref X); // check if has even length of Divide equal
-            int y_size = Even_Length(ref Y); // ~
-            N = X.Length; // set N
-
-            if (x_size == y_size) size_of_sub_prob = x_size;
-            else { return Failed; }
-
-            x1 = new int[size_of_sub_prob];
-            x2 = new int[size_of_sub_prob];
-            y1 = new int[size_of_sub_prob];
-            y2 = new int[size_of_sub_prob];
-            // int [] Q={0};
-            Divide_into2Array(ref x1, ref x2, ref X, size_of_sub_prob);
-            Divide_into2Array(ref y1, ref y2, ref Y, size_of_sub_prob);
-           // if (N == 1) return Q;
-            if (N == 2)  //Base Case
-            {
-                a = x1[0] * y1[0];
-                c = x2[0] * y2[0];
-                z = (x1[0] + x2[0]) * (y1[0] + y2[0]);
-                b = z - (a + c);
-
-                result = (a * Ten_power(2)) + c + (b * Ten_power(1));
-                string Res = result.ToString();
-                return convert_CharArr_IntArr(Res.ToCharArray());
-
-            }  // Divide And Conqure
-
-            A = Mul(x1, y1);
-            C = Mul(x2, y2);
-            //Make_Equle(ref x1, ref x2);
-            //Zx = ADD(x1, x2);
-            //Make_Equle(ref y1, ref y2);
-            //Zy = ADD(y1, y2);
-            //Z = Multiply_Morgan(Zx, Zy);
-            //Make_Equle(ref A,ref C);
-            //AC = ADD(A, C);
-            //Make_Equle(ref Z,ref AC);
-            //B = SUB(Z,AC);
-            Make_Equle(ref x1, ref x2);
-            Zx = ADD(x1, x2);  //  ضرب المقصين
-            Make_Equle(ref y1, ref y2);
-            Zy = ADD(y1, y2);
-            Make_Equle(ref Zx, ref Zy);
-            Z = Mul(Zx, Zy);
-            Make_Equle(ref A, ref C);
-            W = ADD(A, C);
-            Make_Equle(ref Z, ref W);
-            D = SUB(Z, W);
-            // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
-
-            Append_Zeros(ref A, N);  // A 10^N
-            Append_Zeros(ref D, N / 2); // B 10^N/2
-
-            Make_Equle(ref A, ref C);
-            AC = ADD(A, C);
-            Make_Equle(ref AC, ref D);
-            return ADD(AC, D);
-
-            //return Failed;
         }
 }
 }
