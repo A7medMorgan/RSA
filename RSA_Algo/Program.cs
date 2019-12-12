@@ -16,12 +16,22 @@ namespace RSA_Algo
             int[] arr1 = BigInteger.convert_CharArr_IntArr(s1.ToCharArray());
             int[] arr2 = BigInteger.convert_CharArr_IntArr(s2.ToCharArray());
             BigInteger.Make_Equle(ref arr1,ref arr2);
-            int []arr= BigInteger.Multiply(arr1, arr2);
+            int res1,res2 = 0;
+
+            res1 =System.Environment.TickCount &Int32.MaxValue ;
+            int[] arr = BigInteger.Multiply(arr1, arr2);
+            res2 = System.Environment.TickCount &Int32.MaxValue;
+
+            int result = res2 - res1;
+            string r = result.ToString();
+            Console.WriteLine(r);
+
             foreach (int i in arr)
             {
                 Console.Write(i);
             }
             Console.WriteLine("\n" + arr.Length);
+
             //string[] lines = File.readFromFile(File.file);
 
             //// Display the file contents by using a foreach loop.
@@ -34,8 +44,6 @@ namespace RSA_Algo
 
             //File.writeToFile(File.file1,lines);
         }
-        public static void Display_time(int T1,int T2)
-        {
-        }
+      
     }
 }
