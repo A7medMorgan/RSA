@@ -21,16 +21,34 @@ namespace RSA_Algo
             res1 =System.Environment.TickCount &Int32.MaxValue ;
             int[] arr = BigInteger.Multiply(arr1, arr2);
             res2 = System.Environment.TickCount &Int32.MaxValue;
-
-            int result = res2 - res1;
-            string r = result.ToString();
-            Console.WriteLine(r);
-
-            foreach (int i in arr)
+            int c = 0;
+            for(int i=0;i<arr.Length;i++)
             {
-                Console.Write(i);
+                if (arr[i] == 0)
+                {
+                    c++;
+                    continue;
+                    
+                }
+                else
+                {
+                    break;
+                }
             }
-            Console.WriteLine("\n" + arr.Length);
+            for (int i = c; i < arr.Length; i++)
+            {
+                Console.Write(arr[i]);
+            }
+            Console.WriteLine();
+            //int result = res2 - res1;
+            //string r = result.ToString();
+            //Console.WriteLine(r);
+
+            //foreach (int i in arr)
+            //{
+            //    Console.Write(i);
+            //}
+            //Console.WriteLine("\n" + arr.Length);
 
             //string[] lines = File.readFromFile(File.file);
 
