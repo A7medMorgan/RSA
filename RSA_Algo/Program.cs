@@ -21,25 +21,39 @@ namespace RSA_Algo
             res1 =System.Environment.TickCount &Int32.MaxValue ;
             int[] arr = BigInteger.Multiply(arr1, arr2);
             res2 = System.Environment.TickCount &Int32.MaxValue;
-            int c = 0;
-            for(int i=0;i<arr.Length;i++)
+            int[] v = BigInteger.convert(arr);
+            for(int i=0;i<v.Length;i++)
             {
-                if (arr[i] == 0)
-                {
-                    c++;
-                    continue;
-                    
-                }
-                else
-                {
-                    break;
-                }
-            }
-            for (int i = c; i < arr.Length; i++)
-            {
-                Console.Write(arr[i]);
+                Console.Write(v[i]);
             }
             Console.WriteLine();
+            ////int c = 0;
+            ////for(int i=0;i<arr.Length;i++)
+            ////{
+            ////    if (arr[i] == 0)
+            ////    {
+            ////        c++;
+            ////        continue;
+                    
+            ////    }
+            ////    else
+            ////    {
+            ////        break;
+            ////    }
+            ////}
+            ////int[] v = new int[arr.Length - c];
+            ////int t = 0;
+            ////for (int i = c; i < arr.Length; i++)
+            ////{
+            ////    v[t] = arr[i];
+            ////    t++;
+            ////}
+            ////Console.WriteLine();
+            ////for (int i = 0; i < v.Length; i++)
+            ////{
+            ////    Console.Write(v[i]);
+            ////}
+            ////Console.WriteLine();
             //int result = res2 - res1;
             //string r = result.ToString();
             //Console.WriteLine(r);

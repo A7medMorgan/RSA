@@ -244,5 +244,30 @@ namespace RSA_Algo
                 return 10*Ten_power(N - 1);
         
         }
+        public static int[] convert(int[] int_arr) //O(N)
+        {
+            int c = 0;
+            for (int i = 0; i < int_arr.Length; i++)
+            {
+                if (int_arr[i] == 0)
+                {
+                    c++;
+                    continue;
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+            int[] v = new int[int_arr.Length - c];
+            int t = 0;
+            for (int i = c; i < int_arr.Length; i++)
+            {
+                v[t] = int_arr[i];
+                t++;
+            }
+            return v;
+        }
 }
 }
