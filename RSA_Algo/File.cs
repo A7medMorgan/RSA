@@ -8,9 +8,12 @@ namespace RSA_Algo
 {
     class File
     {
-        public static string file = "AddTestCases.txt";
-        public static string file1 = "Massege.txt";
-
+        public static string file_add_input = "AddTestCases.txt";
+        public static string file_sub_input = "SubtractTestCases.txt";
+        public static string file_mul_input = "MultiplyTestCases.txt";
+        public static string file_add_output = "OurAddTestCases.txt";
+        public static string file_sub_output = "OurSubtractTestCases.txt";
+        public static string file_mul_output = "OurMultiplyTestCases.txt";
         // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.
         // You can modify the path if necessary.
 
@@ -65,18 +68,18 @@ namespace RSA_Algo
         //    }
 
         //}
-       public static string[] writeToFile(string filename,string[]line)
+        public static string[] writeToFile(string filename, string[] line)
         {
-           
-           
+
+
             using (System.IO.StreamWriter file1 = new System.IO.StreamWriter(filename, true)) ;
 
-                for (int i = 0; i < line.Length; i++)
-                {
-                    System.IO.File.WriteAllLines(filename, line);
+            for (int i = 0; i < line.Length; i++)
+            {
+                System.IO.File.WriteAllLines(filename, line);
 
-                }
-            
+            }
+
             return line;
         }
 
