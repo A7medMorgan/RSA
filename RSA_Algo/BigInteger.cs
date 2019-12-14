@@ -256,20 +256,26 @@ namespace RSA_Algo
                     {
                         c++;
                         continue;
-
                     }
                     else
                     {
                         break;
                     }
                 }
-                int[] v = new int[int_arr.Length - c];
+            int[] v;
+            if (int_arr.Length == c)
+            {
+                v = new int[1];
+                return v;
+            }
+             v= new int[int_arr.Length - c];
                 int t = 0;
                 for (int i = c; i < int_arr.Length; i++)
                 {
                     v[t] = int_arr[i];
                     t++;
                 }
+            
                 return v;
             }
         }

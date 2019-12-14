@@ -8,12 +8,12 @@ namespace RSA_Algo
 {
     class File
     {
-        public static string file_add_input = "AddTestCases.txt";
-        public static string file_sub_input = "SubtractTestCases.txt";
-        public static string file_mul_input = "MultiplyTestCases.txt";
-        public static string file_add_output = "OurAddTestCases.txt";
-        public static string file_sub_output = "OurSubtractTestCases.txt";
-        public static string file_mul_output = "OurMultiplyTestCases.txt";
+        public static string file_add_input = "./../../../AddTestCases.txt";
+        public static string file_sub_input = "./../../../SubtractTestCases.txt";
+        public static string file_mul_input = "./../../../MultiplyTestCases.txt";
+        public static string file_add_output = "Result/AddTestCases_Result.txt";
+        public static string file_sub_output = "Result/SubtractTestCases_Result.txt";
+        public static string file_mul_output = "Result/MultiplyTestCases_Result.txt";
         // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.
         // You can modify the path if necessary.
 
