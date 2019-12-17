@@ -10,6 +10,13 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
+            int[] arr1 = { 1, 2 };
+            int[] arr2 = { 6 };
+            Tuple<int, int> tuple = BigInteger.div(1,3);
+            Console.WriteLine(tuple.Item1+"  "+tuple.Item2);
+        }
+        void MileStone1()
+        {
             Console.WriteLine("please enter the number of operation do you want to check : ");
             Console.WriteLine("to add press (1) ");
             Console.WriteLine("to subtract press (2) ");
@@ -23,7 +30,7 @@ namespace RSA_Algo
                 string[] str = new string[num];
                 int j = 2, k = 3;
                 Stopwatch sw = new Stopwatch();
-                
+
                 for (int i = 0; i < num; i++)
                 {
                     string s1 = lines[j];
@@ -40,7 +47,7 @@ namespace RSA_Algo
                     j += 3;
                     k += 3;
                 }
-                
+
                 Console.WriteLine("TickTime : " + sw.Elapsed);
                 string[] str1 = new string[num * 2];
                 int j1 = 0; int y = 1;
@@ -63,7 +70,7 @@ namespace RSA_Algo
                 string[] str = new string[num];
                 int j = 2, k = 3;
                 Stopwatch sw = new Stopwatch();
-                
+
                 for (int i = 0; i < num; i++)
                 {
                     string s1 = lines[j];
@@ -80,7 +87,7 @@ namespace RSA_Algo
                     j += 3;
                     k += 3;
                 }
-                
+
                 Console.WriteLine("TickTime : " + sw.Elapsed);
                 string[] str1 = new string[num * 2];
                 int j1 = 0; int y = 1;
@@ -118,7 +125,7 @@ namespace RSA_Algo
                     j += 3;
                     k += 3;
                 }
-                
+
                 Console.WriteLine("TickTime : " + sw.Elapsed);
                 string[] str1 = new string[num * 2];
                 int j1 = 0; int y = 1;
@@ -138,16 +145,15 @@ namespace RSA_Algo
 
             Console.WriteLine("To Try another choise Press: (Y)");
             string q;
-            q=Console.ReadLine();
+            q = Console.ReadLine();
             if (q == "y")
             {
                 Main(null);
             }
-            else {
+            else
+            {
                 return;
             }
-
         }
-
     }
 }
