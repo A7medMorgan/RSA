@@ -289,7 +289,7 @@ namespace RSA_Algo
             }
                 return v;    //O(1)
         }
-        public static bool compare(ref int[] arr1, ref int[] arr2)
+        public static bool compare(ref int[] arr1, ref int[] arr2)//retun true when arr1<arr2   //O(N)
         {
             int size=arr1.Length;
             if (arr1.Length < arr2.Length) //O(1)
@@ -312,25 +312,33 @@ namespace RSA_Algo
             }
             return false;
         }
-        //public static Tuple <int[] ,int[] > div(int [] arrA ,int [] arrB)
-        //{
-        //    int[] zero = { 0 }, one = { 1 };
-        //    int[] q, r;
-        //    int[] mul_By2 = { 2 }; 
-        //    Tuple <int[], int[]> Q_R;
-        //    if (arrA.Length < arrB.Length)
-        //        return new Tuple<int[], int[]> (zero, arrA);
-        //    arrB = Multiply(arrB, mul_By2);
-        //    Q_R = div(arrA, arrB);
-        //    q = Q_R.Item1;
-        //    q= Multiply(arrB, mul_By2);
-        //    r = Q_R.Item2;
-        //    if (r.Length < arrB.Length)
-        //        return new Tuple<int[], int[]>(q , r);
-        //    else
-        //        return new Tuple<int[], int[]>(ADD(q,one),SUB(r,arrB));
+        public static Tuple<int[], int[]> div(int[] arrA, int[] arrB)
+        {
+            int[] zero = { 0 }, one = { 1 };
+            int[] q, r;
+            int[] mul_By2 = { 2 };
+            Tuple<int[], int[]> Q_R;
+            if (compare(ref arrA , ref arrB))
+                return new Tuple<int[], int[]>(zero, arrA);
+            arrB = Multiply(arrB, mul_By2);
+            arrB = convert(arrB);
+            Q_R = div(arrA, arrB);
+            q = Q_R.Item1;
+            q = Multiply(arrB, mul_By2);
+            q=convert(q);
+            r = Q_R.Item2;
+            if (compare(ref r, ref arrB))
+            {
+                Console.WriteLine("u");
+                return new Tuple<int[], int[]>(q, r);
+            }
+            else
+            {
+                Console.WriteLine("P");
+                return new Tuple<int[], int[]>(ADD(q, one), SUB(r, arrB));
+            }
 
-        //}
+        }
 
         public static Tuple<int, int> div(int arrA, int arrB)  //O(N)
         {

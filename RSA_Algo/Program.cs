@@ -12,8 +12,17 @@ namespace RSA_Algo
         {
             int[] arr1 = { 1, 2 };
             int[] arr2 = { 6 };
-            Tuple<int, int> tuple = BigInteger.div(1,3);
-            Console.WriteLine(tuple.Item1+"  "+tuple.Item2);
+            Tuple<int [], int []> tuple = BigInteger.div(arr1,arr2);
+            foreach (int i in tuple.Item1) {
+                Console.Write(i);
+            }
+            Console.WriteLine();
+            foreach (int i in tuple.Item2)
+            {
+
+                Console.Write(i);
+            }
+            //Console.WriteLine(tuple.Item1.Length+"  "+tuple.Item2.Length);
         }
         void MileStone1()
         {
