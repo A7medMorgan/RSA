@@ -310,13 +310,8 @@ namespace RSA_Algo
                     }
                 }
             }
-<<<<<<< HEAD
             return false;
         }
-    }
-}
-=======
-
         //public static Tuple <int[] ,int[] > div(int [] arrA ,int [] arrB)
         //{
         //    int[] zero = { 0 }, one = { 1 };
@@ -339,27 +334,25 @@ namespace RSA_Algo
 
         public static Tuple<int, int> div(int arrA, int arrB)  //O(N)
         {
-            
+
             int q, r;   //O(1)
-            
+
             Tuple<int, int> Q_R; //O(N)
-            if (arrA< arrB)  //O(1)
+            if (arrA < arrB)  //O(1)
                 return new Tuple<int, int>(0, arrA); //O(1)
 
-            Q_R = div(arrA, arrB*2);  //O(N)
+            Q_R = div(arrA, arrB * 2);  //O(N)
             q = Q_R.Item1; //O(1)
-            q = q*2;  //O(1)
+            q = q * 2;  //O(1)
             r = Q_R.Item2;  //O(1)
-            if (r< arrB)  //O(1)
+            if (r < arrB)  //O(1)
                 return new Tuple<int, int>(q, r);   //O(1)
             else
-                return new Tuple<int, int>(q+1, r- arrB);   //O(1)
+                return new Tuple<int, int>(q + 1, r - arrB);   //O(1)
 
         }
     }
-    }
->>>>>>> 2a8a8f6bb784f6b92902d339aa987178e7e24ce1
-
+}
         
     
 
