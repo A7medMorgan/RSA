@@ -6,6 +6,22 @@ using System.Threading.Tasks;
 
 namespace RSA_Algo
 {
+    public class Pair<T, U>
+    {
+        public Pair()
+        {
+        }
+
+        public Pair(T first, U second)
+        {
+            this.First = first;
+            this.Second = second;
+        }
+
+        public T First { get; set; }
+        public U Second { get; set; }
+    };
+
     class BigInteger
     {
         
@@ -278,7 +294,47 @@ namespace RSA_Algo
             
                 return v;
             }
+
+        //public static Tuple <int[] ,int[] > div(int [] arrA ,int [] arrB)
+        //{
+        //    int[] zero = { 0 }, one = { 1 };
+        //    int[] q, r;
+        //    int[] mul_By2 = { 2 }; 
+        //    Tuple <int[], int[]> Q_R;
+        //    if (arrA.Length < arrB.Length)
+        //        return new Tuple<int[], int[]> (zero, arrA);
+        //    arrB = Multiply(arrB, mul_By2);
+        //    Q_R = div(arrA, arrB);
+        //    q = Q_R.Item1;
+        //    q= Multiply(arrB, mul_By2);
+        //    r = Q_R.Item2;
+        //    if (r.Length < arrB.Length)
+        //        return new Tuple<int[], int[]>(q , r);
+        //    else
+        //        return new Tuple<int[], int[]>(ADD(q,one),SUB(r,arrB));
+
+        //}
+
+        public static Tuple<int, int> div(int arrA, int arrB)  //O(N)
+        {
+            
+            int q, r;   //O(1)
+            
+            Tuple<int, int> Q_R; //O(N)
+            if (arrA< arrB)  //O(1)
+                return new Tuple<int, int>(0, arrA); //O(1)
+
+            Q_R = div(arrA, arrB*2);  //O(N)
+            q = Q_R.Item1; //O(1)
+            q = q*2;  //O(1)
+            r = Q_R.Item2;  //O(1)
+            if (r< arrB)  //O(1)
+                return new Tuple<int, int>(q, r);   //O(1)
+            else
+                return new Tuple<int, int>(q+1, r- arrB);   //O(1)
+
         }
+    }
     }
 
         
