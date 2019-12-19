@@ -317,8 +317,9 @@ namespace RSA_Algo
             }
             return false;  //O(1)
         }
-        public static Tuple<int[], int[]> div(int[] arrA, int[] arrB)
-        {
+        //Tuble.item1=Divide   | Tuble.item2=Reminder
+        public static Tuple<int[], int[]> div_mod(int[] arrA, int[] arrB)
+        { 
             int[] zero = { 0 }, one = { 1 }, mul_By2 = { 2 };
             int[] _result,_reminder;
             Tuple<int[], int[]> Q_R;
@@ -326,7 +327,7 @@ namespace RSA_Algo
             if (Compare(ref arrA , ref arrB))
                 return new Tuple<int[], int[]>(zero, arrA);
 
-            Q_R = div(arrA,Multiply(arrB, mul_By2));
+            Q_R = div_mod(arrA,Multiply(arrB, mul_By2));
             _result = Q_R.Item1;
             _result = Multiply(_result, mul_By2);
             _reminder = Q_R.Item2;
@@ -340,7 +341,7 @@ namespace RSA_Algo
             }
         }
 
-        public static Tuple<int, int> div(int A, int B)  //O(N)
+        public static Tuple<int, int> div_mod(int A, int B)  //O(N)
         {
 
             int q, r;   //O(1)
@@ -349,7 +350,7 @@ namespace RSA_Algo
             if (A < B)  //O(1)
                 return new Tuple<int, int>(0, A); //O(1)
 
-            Q_R = div(A, B * 2);  //O(N)
+            Q_R = div_mod(A, B * 2);  //O(N)
             q = Q_R.Item1; //O(1)
             q = q * 2;  //O(1)
             r = Q_R.Item2;  //O(1)
@@ -358,6 +359,75 @@ namespace RSA_Algo
             else
                 return new Tuple<int, int>(q + 1, r - B);   //O(1)
 
+        }
+        public static int Modular_Division(int _base, int pow, int mod)   //O(logN)
+        {        //T(N)=T(N/2)+O(1)     Master Method case 2  F(n)=O(1)  g(x)=N^(log 1 base 2)  =  O(1*log(N))
+            int Result;  //O(1)
+            if (pow == 0)    //O(1)
+                return 1;     //O(1)
+            else if (_base == 0)      //O(1)
+            {
+                return 0;     //O(1)
+            }
+            else if (pow == 1)     //O(1)
+            {
+                return _base % mod;   //O(1)
+            }
+            else
+            {
+                if (pow % 2 == 0)   //O(1)
+                {
+                    Result = Modular_Division(_base, pow / 2, mod);  //T(N/2)
+                    Result = (Result * Result);    //O(1)
+                }
+                else
+                {
+                    Result = Modular_Division(_base, pow / 2, mod);   //T(N/2)
+                    Result = (Result * Result * (_base % mod));      //O(1)
+                }
+            }
+            return Result % mod;   //O(1)
+        }
+        public static int[] RSA(int[] _base, int[] pow, int[] mod)
+        {
+            Tuple<int[], int[]> tuple_pow,tuple_mod,tuple_res;
+            int[] zero = { 0 }, one = { 1 }, two = { 2 };
+            int[] Result,div_by2,remind;
+
+            tuple_mod = div_mod(_base, mod);  // Double used
+
+            if (pow.Length == 1 && pow[0] == 0)
+            {
+                return one;
+            }
+            else if (_base.Length == 1 && _base[0] == 0)
+            {
+                return zero;
+            }
+            else if (pow.Length == 1 && pow[0] == 1)
+            {
+              //  tuble = div_mod(_base, mod);
+                return tuple_mod.Item1;
+            }
+            else {
+                tuple_pow = div_mod(pow, two);
+                div_by2 = tuple_pow.Item1;
+                remind = tuple_pow.Item2;
+                if (remind.Length == 1 && remind[0] == 0)
+                {
+                    Result = RSA(_base, div_by2, mod);
+                    Result = Multiply(Result, Result);
+                }
+                else
+                {
+                    Result = RSA(_base, div_by2, mod);
+                    Result = Multiply(Result, Result);
+                    remind = tuple_mod.Item2;
+                    Result = Multiply(Result,remind);
+                }
+            }
+            tuple_res = div_mod(Result, mod);
+            return tuple_res.Item2;
         }
     }
 }

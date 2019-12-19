@@ -10,28 +10,30 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-            #region simple_divide
-            string a = "12345678";
-            string b = "54321" ;
+            //string m = "2";
+            //string e = "3",d="11";
+            //string n="99";
 
-            Tuple<int[], int[]> tuple = BigInteger.div(BigInteger.convert_CharArr_IntArr(a.ToCharArray()),BigInteger.convert_CharArr_IntArr(b.ToCharArray()));
-            foreach (int i in tuple.Item1)
-            {
-                Console.Write(i);
-            }
-            Console.WriteLine();
-            foreach (int i in tuple.Item2)
-            {
+            //int[] M = BigInteger.convert_CharArr_IntArr(m.ToCharArray());
+            //int[] E = BigInteger.convert_CharArr_IntArr(e.ToCharArray());
+            //int[] D = BigInteger.convert_CharArr_IntArr(d.ToCharArray());
+            //int[] N = BigInteger.convert_CharArr_IntArr(n.ToCharArray());
 
-                Console.Write(i);
-            }
-            Console.WriteLine();
-            #endregion
+            //int[] E_M = BigInteger.RSA(M,E,N);
+            
+            //foreach (int i in E_M)
+            //{
 
-            // MileStone1();
+            //    Console.Write(i);
+            //}
+            //Console.WriteLine();
+            SimpleTest();
+            // Console.WriteLine(BigInteger.rsa(2,3,3));
+
+            //MileStone1();
         }
         #region MileStone1
-        void MileStone1()
+        static void MileStone1()
             {
                 Console.WriteLine("please enter the number of operation do you want to check : ");
                 Console.WriteLine("to add press (1) ");
@@ -165,6 +167,27 @@ namespace RSA_Algo
                     return;
                 }
             }
-            #endregion
+        #endregion
+        #region Test
+        static void SimpleTest()
+        {
+           
+            string a = "800000000";
+            string b = "8";
+
+            Tuple<int[], int[]> tuple = BigInteger.div_mod(BigInteger.convert_CharArr_IntArr(a.ToCharArray()), BigInteger.convert_CharArr_IntArr(b.ToCharArray()));
+            foreach (int i in tuple.Item1)
+            {
+                Console.Write(i);
+            }
+            Console.WriteLine("\t div");
+            foreach (int i in tuple.Item2)
+            {
+
+                Console.Write(i);
+            }
+            Console.WriteLine("\t mod");
+        }
+        #endregion
     }
 }
