@@ -388,6 +388,8 @@ namespace RSA_Algo
             }
             return Result % mod;   //O(1)
         }
+
+        #region Morgan_RSA(M_RSA)
         public static int[] RSA(int[] _base, int[] pow, int[] mod)
         {
             Tuple<int[], int[]> tuple_pow,tuple_mod,tuple_res;
@@ -407,7 +409,7 @@ namespace RSA_Algo
             else if (pow.Length == 1 && pow[0] == 1)
             {
               //  tuble = div_mod(_base, mod);
-                return tuple_mod.Item1;
+                return tuple_mod.Item2;
             }
             else {
                 tuple_pow = div_mod(pow, two);
@@ -429,6 +431,7 @@ namespace RSA_Algo
             tuple_res = div_mod(Result, mod);
             return tuple_res.Item2;
         }
+        #endregion
     }
 }
         

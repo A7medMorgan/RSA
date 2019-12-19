@@ -10,25 +10,8 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-            //string m = "2";
-            //string e = "3",d="11";
-            //string n="99";
-
-            //int[] M = BigInteger.convert_CharArr_IntArr(m.ToCharArray());
-            //int[] E = BigInteger.convert_CharArr_IntArr(e.ToCharArray());
-            //int[] D = BigInteger.convert_CharArr_IntArr(d.ToCharArray());
-            //int[] N = BigInteger.convert_CharArr_IntArr(n.ToCharArray());
-
-            //int[] E_M = BigInteger.RSA(M,E,N);
-            
-            //foreach (int i in E_M)
-            //{
-
-            //    Console.Write(i);
-            //}
-            //Console.WriteLine();
+           
             SimpleTest();
-            // Console.WriteLine(BigInteger.rsa(2,3,3));
 
             //MileStone1();
         }
@@ -171,22 +154,23 @@ namespace RSA_Algo
         #region Test
         static void SimpleTest()
         {
-           
-            string a = "800000000";
-            string b = "8";
+            string m = "2";
+            string e = "5", d = "11";
+            string n = "14";
 
-            Tuple<int[], int[]> tuple = BigInteger.div_mod(BigInteger.convert_CharArr_IntArr(a.ToCharArray()), BigInteger.convert_CharArr_IntArr(b.ToCharArray()));
-            foreach (int i in tuple.Item1)
+            int[] M = BigInteger.convert_CharArr_IntArr(m.ToCharArray());
+            int[] E = BigInteger.convert_CharArr_IntArr(e.ToCharArray());
+            int[] D = BigInteger.convert_CharArr_IntArr(d.ToCharArray());
+            int[] N = BigInteger.convert_CharArr_IntArr(n.ToCharArray());
+
+            int[] E_M = BigInteger.RSA(M, E, N);
+
+            foreach (int i in E_M)
             {
+
                 Console.Write(i);
             }
-            Console.WriteLine("\t div");
-            foreach (int i in tuple.Item2)
-            {
-
-                Console.Write(i);
-            }
-            Console.WriteLine("\t mod");
+            Console.WriteLine();
         }
         #endregion
     }
