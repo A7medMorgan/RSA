@@ -79,7 +79,8 @@ namespace RSA_Algo
                     R[i] = result;   //O(1)
                     result = 0;   //O(1)
                 }
-                return R;   //O(1)
+                Remove_Zeros_FromLeft(ref R);   //O(1)
+            return R;  //O(1)
             }
             public static void Display(int[] Num)
             {
@@ -106,12 +107,13 @@ namespace RSA_Algo
                 int[] Failed = { 0 }; //O(1)
                 int size_of_sub_prob, N; //O(1)
                                          // 10^n[A]+[C]+[B]10^n/2                              // Karatsuba Multiplication
-                int[] A // [X1Y1]
-                    , C // [X2Y2]
-                    , B // Z-(A+C)
-                    , Z, Zx, Zy// [X1+X2][Y1+Y2]
-                    , AC;                                   //O(1)
-                int a, c, b, z, result;    //O(1)
+            int[] A // [X1Y1]
+                , C // [X2Y2]
+                , B // Z-(A+C)
+                , Z, Zx, Zy// [X1+X2][Y1+Y2]
+                , AC                                   //O(1)
+                , Result;  //O(1)
+                int a, c, b, z, result_baseCase;    //O(1)
                 int[] x1, x2
                     , y1, y2;      //O(1)
                 Make_Equle(ref X, ref Y);  // make Equle length         O(N)
@@ -136,8 +138,8 @@ namespace RSA_Algo
                     z = (x1[0] + x2[0]) * (y1[0] + y2[0]);
                     b = z - (a + c);
 
-                    result = (a * Ten_power(2)) + c + (b * Ten_power(1));  //O(N)
-                    string Res = result.ToString();  //O(1)
+                    result_baseCase = (a * Ten_power(2)) + c + (b * Ten_power(1));  //O(N)
+                    string Res = result_baseCase.ToString();  //O(1)
                     return convert_CharArr_IntArr(Res.ToCharArray());   //O(N)*O(1) =O(N)
 
                 }  // Divide And Conqure
@@ -162,8 +164,9 @@ namespace RSA_Algo
                 Append_Zeros(ref B, N / 2); // B 10^N/2       //O(N)
 
                 AC = ADD(A, C);       //O(N)
-                return ADD(AC, B);       //O(N)
-
+                Result= ADD(AC, B);       //O(N)
+            Remove_Zeros_FromLeft(ref Result);   //O(N)
+            return Result;
                 //return Failed;
             }
             public static void Make_Equle(ref int[] X, ref int[] Y)    //O(N)
@@ -259,7 +262,7 @@ namespace RSA_Algo
                     return 10 * Ten_power(N - 1);    //O(N)
 
         }
-            public static int[] convert(int[] int_arr) //O(N)
+            public static void Remove_Zeros_FromLeft(ref int[] int_arr) //O(N)
             {
                 int c = 0;   //O(1)
             for (int i = 0; i < int_arr.Length; i++)   //O(N)
@@ -278,7 +281,8 @@ namespace RSA_Algo
             if (int_arr.Length == c)      //O(1)
             {
                 v = new int[1];    //O(1)
-                return v;   //O(1)
+                int_arr = v;  //O(1)
+                return ;   //O(1)
             }
              v= new int[int_arr.Length - c];    //O(1)
             int t = 0;       //O(1)
@@ -287,11 +291,12 @@ namespace RSA_Algo
                     v[t] = int_arr[i];    //O(1)
                 t++;    //O(1)
             }
-                return v;    //O(1)
+            int_arr = v;   //O(1)
+                return;    //O(1)
         }
-        public static bool compare(ref int[] arr1, ref int[] arr2)//retun true when arr1<arr2   //O(N)
+        public static bool Compare(ref int[] arr1, ref int[] arr2)//retun true when arr1<arr2   //O(N)
         {
-            int size=arr1.Length;
+            int size=arr1.Length;   //O(1)
             if (arr1.Length < arr2.Length) //O(1)
                 return true;  //O(1)
             else if (arr2.Length < arr1.Length)  //O(1)
@@ -310,53 +315,48 @@ namespace RSA_Algo
                     }
                 }
             }
-            return false;
+            return false;  //O(1)
         }
         public static Tuple<int[], int[]> div(int[] arrA, int[] arrB)
         {
-            int[] zero = { 0 }, one = { 1 };
-            int[] q, r;
-            int[] mul_By2 = { 2 };
+            int[] zero = { 0 }, one = { 1 }, mul_By2 = { 2 };
+            int[] _result,_reminder;
             Tuple<int[], int[]> Q_R;
-            if (compare(ref arrA , ref arrB))
+
+            if (Compare(ref arrA , ref arrB))
                 return new Tuple<int[], int[]>(zero, arrA);
-            arrB = Multiply(arrB, mul_By2);
-            arrB = convert(arrB);
-            Q_R = div(arrA, arrB);
-            q = Q_R.Item1;
-            q = Multiply(arrB, mul_By2);
-            q=convert(q);
-            r = Q_R.Item2;
-            if (compare(ref r, ref arrB))
+
+            Q_R = div(arrA,Multiply(arrB, mul_By2));
+            _result = Q_R.Item1;
+            _result = Multiply(_result, mul_By2);
+            _reminder = Q_R.Item2;
+            if (Compare(ref _reminder, ref arrB))
             {
-                Console.WriteLine("u");
-                return new Tuple<int[], int[]>(q, r);
+                return new Tuple<int[], int[]>(_result, _reminder);
             }
             else
             {
-                Console.WriteLine("P");
-                return new Tuple<int[], int[]>(ADD(q, one), SUB(r, arrB));
+                return new Tuple<int[], int[]>(ADD(_result, one), SUB(_reminder, arrB));
             }
-
         }
 
-        public static Tuple<int, int> div(int arrA, int arrB)  //O(N)
+        public static Tuple<int, int> div(int A, int B)  //O(N)
         {
 
             int q, r;   //O(1)
 
-            Tuple<int, int> Q_R; //O(N)
-            if (arrA < arrB)  //O(1)
-                return new Tuple<int, int>(0, arrA); //O(1)
+            Tuple<int, int> Q_R; //O(1)
+            if (A < B)  //O(1)
+                return new Tuple<int, int>(0, A); //O(1)
 
-            Q_R = div(arrA, arrB * 2);  //O(N)
+            Q_R = div(A, B * 2);  //O(N)
             q = Q_R.Item1; //O(1)
             q = q * 2;  //O(1)
             r = Q_R.Item2;  //O(1)
-            if (r < arrB)  //O(1)
+            if (r < B)  //O(1)
                 return new Tuple<int, int>(q, r);   //O(1)
             else
-                return new Tuple<int, int>(q + 1, r - arrB);   //O(1)
+                return new Tuple<int, int>(q + 1, r - B);   //O(1)
 
         }
     }
