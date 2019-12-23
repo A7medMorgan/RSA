@@ -10,8 +10,66 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-            test_String_Bouns1();
+            //Console.WriteLine("Choose test to Start (simple 1 , complete 2)");
+            //int x = Convert.ToInt32(Console.ReadLine());
+            //if (x == 1)
+            //    File_RSA(File.file_simple_rsa);
+            //else
+            //    File_RSA(File.file_complete_rsa);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            string M = "41766942386500566296578237070670959299719447915305139877556131342637463900048558377157395064819754504877734317556821079";
+            string E = "22397637870882549517368596622641300924171095020557753582603446902846197377658196974714575577237681892436409853219169457";
+            string N = "47594980475625417724408267823112764463863576918685226363032787239910118740004860624166859668486833021538759738968887527";
+            int[] _M = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
+            int[] _E = BigInteger.convert_CharArr_IntArr(E.ToCharArray());
+            int[] _N = BigInteger.convert_CharArr_IntArr(N.ToCharArray());
+
+            BigInteger.Display(BigInteger.RSA(_M, _E, _N));
+            sw.Stop();
+            // test_String_Bouns1();
             //MileStone1();
+            Console.WriteLine("TickTime : " + sw.Elapsed);
+        }
+        public static void File_RSA(string FileName)
+        {
+            Stopwatch sw,Alltest;
+            string N,M,EM,E,D;
+                string[] lines = File.readFromFile(FileName);
+                int num = Convert.ToInt32(lines[0]);
+                
+                int n1 = 1, e = 2, m = 3, type1 = 4,n2=5,d=6,Em=7,type2=8;
+            //start test
+            Alltest=new Stopwatch();
+            Alltest.Start();
+                for (int i = 0; i < num/2; i++)
+                {
+                    N = lines[n1];
+                    E = lines[e];
+                    M = lines[m];
+                    D = lines[d];
+                    EM = lines[Em];
+                    int[] _M = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
+                    int[] _E = BigInteger.convert_CharArr_IntArr(E.ToCharArray());
+                    int[] _N = BigInteger.convert_CharArr_IntArr(N.ToCharArray());
+                    int[] _EM = BigInteger.convert_CharArr_IntArr(EM.ToCharArray());
+                    int[] _D = BigInteger.convert_CharArr_IntArr(D.ToCharArray());
+                sw = new Stopwatch();
+                //start time
+                sw.Start();
+                    int[] Encrypted_m = BigInteger.RSA(_M, _E, _N);
+                //Encrypte
+                    int[] Decrypted_m = BigInteger.RSA(_EM, _D, _N);
+                //Decrypte
+                sw.Stop();
+                //stop time
+                Console.WriteLine("TickTime Test%d: " + sw.Elapsed,num/2);
+                n1 += 8; e += 8;m += 8;n2 += 8;d += 8;Em += 8;type1 += 8;type2 += 8;
+                }
+            //Stop test
+            Alltest.Stop();
+            Console.WriteLine("TickTime Test of %s: " + Alltest.Elapsed,FileName);
+
         }
         static void test_String_Bouns1()
         {
@@ -175,7 +233,7 @@ namespace RSA_Algo
         {
             string m = _M;
             
-            string n = "300217";
+            string n = "3658315382137043";
             Console.WriteLine("Massage \t"+m);
             int[] M = BigInteger.convert_CharArr_IntArr(m.ToCharArray());
             int[] E_D = BigInteger.convert_CharArr_IntArr(_e_d.ToCharArray());
