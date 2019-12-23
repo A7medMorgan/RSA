@@ -479,7 +479,7 @@ namespace RSA_Algo
             return arr;   //O(1)
         }
 
-        public static string convert_Ascii_To_String(int[] Arr) 
+        public static string convert_Ascii_To_String(int[] Arr) //O(N)
         {
             string Massage = "";  //O(1)
             char ch;  //O(1)

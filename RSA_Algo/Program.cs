@@ -10,26 +10,41 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Choose test to Start (simple 1 , complete 2)");
+            Console.WriteLine("Choose test to Start (simple 1 , complete 2,Enter special Massage 3)");
             int x = Convert.ToInt32(Console.ReadLine());
             if (x == 1)
                 File_RSA(File.file_simple_rsa);
-            else
+            else if (x == 2)
                 File_RSA(File.file_complete_rsa);
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
-            //string M = "1058577239695504";
-            //string E = "3012726845747393";
-            //string N = "3658315382137043";
-            //int[] _M = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
-            //int[] _E = BigInteger.convert_CharArr_IntArr(E.ToCharArray());
-            //int[] _N = BigInteger.convert_CharArr_IntArr(N.ToCharArray());
+            else
+            {
+                string _n = "3658315382137043";
+                string e = "17";
+                string d = "3012726845747393";
 
-            //BigInteger.Display(BigInteger.RSA(_M, _E, _N));
-            //sw.Stop();
-            //// test_String_Bouns1();
+            Replay_Massage: Console.WriteLine("Choose 1 to encrypte massage  2 for decrypte");
+                x = Convert.ToInt32(Console.ReadLine());
+                 if (x == 1)
+                {
+                    Console.WriteLine("Enter the Massage Less than 5 character");
+                    string M = Console.ReadLine();
+                     int[] Massage = BigInteger.AsciiCode(M);
+                    Console.WriteLine("N =" + _n +" || "+ "E =" + e);
+                    E_Massage(Massage, e, _n,1);
+                }
+                else if(x==2)
+                {
+                    Console.WriteLine("Enter the Encrypted Massage ");
+                    string M = Console.ReadLine();
+                    int[] M_arr = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
+                    Console.WriteLine("N =" + _n +" || "+ "E =" + d);
+                    E_Massage(M_arr, d, _n, 0);
+                }
+                 else
+                goto Replay_Massage;
+            }
+            Retry();
             ////MileStone1();
-            //Console.WriteLine("TickTime : " + sw.Elapsed);
         }
         public static void File_RSA(string FileName)
         {
@@ -71,11 +86,29 @@ namespace RSA_Algo
             Console.WriteLine("TickTime Test of : " + FileName +"  "+ Alltest.Elapsed);
 
         }
-        static void test_String_Bouns1()
+        public static void E_Massage(int[] Massage, string E_D, string N,int type)
         {
-            string e = "17", d = "281393";
+            //int[] Massage = BigInteger.convert_CharArr_IntArr(massage.ToCharArray());
+            int[] _E_D = BigInteger.convert_CharArr_IntArr(E_D.ToCharArray());
+            int[] _N = BigInteger.convert_CharArr_IntArr(N.ToCharArray());
+            int[] E_M = BigInteger.RSA(Massage, _E_D, _N);
+            if (type == 1)
+            {
+                Console.Write("\nE(M) :=  ");
+                BigInteger.Display(E_M);
+            }
+            else
+            {
+               string result = BigInteger.convert_Ascii_To_String(E_M);
+                Console.Write("\nM :=  ");
+                Console.WriteLine(result);
+            }
+        }
+        static void test_String_Bouns1(string m)
+        {
+            string e = "17", d = "3012726845747393";
             // int[] m = BigInteger.Convert_string_To_intArr("33");
-            string m = "Iu";
+            //string m = "L";
             // BigInteger.Display(m);
             Console.WriteLine("m\t" + m);
 
@@ -211,22 +244,22 @@ namespace RSA_Algo
                     File.writeToFile(File.file_mul_output, str1);
                     Console.WriteLine("Save Success");
                 }
-
-
-
-
-                Console.WriteLine("To Try another choise Press: (Y)");
-                string q;
-                q = Console.ReadLine();
-                if (q == "y")
-                {
-                    Main(null);
-                }
-                else
-                {
-                    return;
-                }
+            Retry();
             }
+        static void Retry()
+        {
+            Console.WriteLine("To Try another choise Press: (Y)");
+            string q;
+            q = Console.ReadLine();
+            if (q == "y")
+            {
+                Main(null);
+            }
+            else
+            {
+                return;
+            }
+        }
         #endregion
         #region Test
         static int[] SimpleTest(string _M , string _e_d)
