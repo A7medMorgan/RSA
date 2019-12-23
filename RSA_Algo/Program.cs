@@ -10,26 +10,26 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Choose test to Start (simple 1 , complete 2)");
-            //int x = Convert.ToInt32(Console.ReadLine());
-            //if (x == 1)
-            //    File_RSA(File.file_simple_rsa);
-            //else
-            //    File_RSA(File.file_complete_rsa);
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            string M = "41766942386500566296578237070670959299719447915305139877556131342637463900048558377157395064819754504877734317556821079";
-            string E = "22397637870882549517368596622641300924171095020557753582603446902846197377658196974714575577237681892436409853219169457";
-            string N = "47594980475625417724408267823112764463863576918685226363032787239910118740004860624166859668486833021538759738968887527";
-            int[] _M = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
-            int[] _E = BigInteger.convert_CharArr_IntArr(E.ToCharArray());
-            int[] _N = BigInteger.convert_CharArr_IntArr(N.ToCharArray());
+            Console.WriteLine("Choose test to Start (simple 1 , complete 2)");
+            int x = Convert.ToInt32(Console.ReadLine());
+            if (x == 1)
+                File_RSA(File.file_simple_rsa);
+            else
+                File_RSA(File.file_complete_rsa);
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            //string M = "1058577239695504";
+            //string E = "3012726845747393";
+            //string N = "3658315382137043";
+            //int[] _M = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
+            //int[] _E = BigInteger.convert_CharArr_IntArr(E.ToCharArray());
+            //int[] _N = BigInteger.convert_CharArr_IntArr(N.ToCharArray());
 
-            BigInteger.Display(BigInteger.RSA(_M, _E, _N));
-            sw.Stop();
-            // test_String_Bouns1();
-            //MileStone1();
-            Console.WriteLine("TickTime : " + sw.Elapsed);
+            //BigInteger.Display(BigInteger.RSA(_M, _E, _N));
+            //sw.Stop();
+            //// test_String_Bouns1();
+            ////MileStone1();
+            //Console.WriteLine("TickTime : " + sw.Elapsed);
         }
         public static void File_RSA(string FileName)
         {
@@ -63,12 +63,12 @@ namespace RSA_Algo
                 //Decrypte
                 sw.Stop();
                 //stop time
-                Console.WriteLine("TickTime Test%d: " + sw.Elapsed,num/2);
+                Console.WriteLine("TickTime Test: "+ type2 / 8+"  " + sw.Elapsed);
                 n1 += 8; e += 8;m += 8;n2 += 8;d += 8;Em += 8;type1 += 8;type2 += 8;
                 }
             //Stop test
             Alltest.Stop();
-            Console.WriteLine("TickTime Test of %s: " + Alltest.Elapsed,FileName);
+            Console.WriteLine("TickTime Test of : " + FileName +"  "+ Alltest.Elapsed);
 
         }
         static void test_String_Bouns1()

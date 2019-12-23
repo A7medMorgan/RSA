@@ -11,9 +11,9 @@ namespace RSA_Algo
         public static string file_add_input = "./../../../AddTestCases.txt";
         public static string file_sub_input = "./../../../SubtractTestCases.txt";
         public static string file_mul_input = "./../../../MultiplyTestCases.txt";
-        public static string file_add_output = "Result/AddTestCases_Result.txt";
-        public static string file_sub_output = "Result/SubtractTestCases_Result.txt";
-        public static string file_mul_output = "Result/MultiplyTestCases_Result.txt";
+        public static string file_add_output = "AddTestCases_Result.txt";
+        public static string file_sub_output = "SubtractTestCases_Result.txt";
+        public static string file_mul_output = "MultiplyTestCases_Result.txt";
         public static string file_simple_rsa = "./../../../SampleRSA_II/SampleRSA.txt";
         public static string file_complete_rsa = "./../../../Complete Test/TestRSA.txt";
         public static string file_simple_rsa_output = "./../../../SampleRSA_II/SampleRSA_output.txt";

@@ -34,15 +34,15 @@ namespace RSA_Algo
         // int s = (int)s1[0] - '0';
 
         //:public
-        public string text;
-            public int[] pub_arr;
+        public string text;   //O(1)
+        public int[] pub_arr;  //O(1)
             //:private
             public static int[] ADD(int[] arr1, int[] arr2)   //O(N)
             {
             Make_Equle(ref arr1, ref arr2);   //O(N)
                 int[] R, R_NoCarry;        // O(1)
-                int size = arr1.Length;
-                int result = 0;    // O(1)
+                int size = arr1.Length;   //O(1)
+            int result = 0;    // O(1)
                 bool carry_flag = false;  // O(1)
 
                 R = new int[size + 1];  // O(1)
@@ -58,13 +58,13 @@ namespace RSA_Algo
                 if (carry_flag) R[0] = 1;   // O(1)
                 else
                 {
-                    R_NoCarry = new int[size];
-                    for (int i = size - 1; i >= 0; i--)
-                    {
-                        R_NoCarry[i] = R[i + 1];
-                    }
-                    return R_NoCarry;
+                    R_NoCarry = new int[size];  //O(1)
+                for (int i = size - 1; i >= 0; i--)  //O(N)
+                {
+                        R_NoCarry[i] = R[i + 1];  //O(1)
                 }
+                    return R_NoCarry;  //O(1)
+            }
                 return R;   // O(1)
             }
 
@@ -73,8 +73,8 @@ namespace RSA_Algo
             {
             Make_Equle(ref arr1, ref arr2);    //O(N)
                 int[] R;   //O(1)
-                int size = arr1.Length;
-                int result = 0;  //O(1)
+                int size = arr1.Length;   //O(1)
+            int result = 0;  //O(1)
                 int carry_Amout = 0;    //O(1)
                 R = new int[size];    //O(1)
                 for (int i = size - 1; i >= 0; i--)  //O(N * {O(1)})
@@ -89,22 +89,21 @@ namespace RSA_Algo
                 Remove_Zeros_FromLeft(ref R);   //O(1)
             return R;  //O(1)
             }
-            public static void Display(int[] Num)
+            public static void Display(int[] Num) //O(N)
             {
-                foreach (int n in Num)
+                foreach (int n in Num) //O(N)
                 {
-                    Console.Write(n);
-                }
-                Console.WriteLine();
+                    Console.Write(n);  //O(1)
             }
-            public void Display()
+                Console.WriteLine();  //O(1)
+        }
+            public void Display()  //O(N)
             {
-                foreach (int n in pub_arr)
+                foreach (int n in pub_arr)  //O(N)
                 {
-                    Console.Write(n);
-                }
-                Console.WriteLine();
-                Console.WriteLine();
+                    Console.Write(n);  //O(1)
+            }
+                Console.WriteLine(); //O(1)
             }
 
             public static int[] Multiply(int[] X, int[] Y)    //T(N)=3T(N/2)+O(N)    Master Method  case 1     F(n)=O(N)    g(x)=N^log3 base(2)
@@ -118,10 +117,10 @@ namespace RSA_Algo
                 , C // [X2Y2]
                 , B // Z-(A+C)
                 , Z, Zx, Zy// [X1+X2][Y1+Y2]
-                , AC                                   //O(1)
+                , AC
                 , Result;  //O(1)
                 int a, c, b, z, result_baseCase;    //O(1)
-                int[] x1, x2
+                int[] x1, x2      //O(1)
                     , y1, y2;      //O(1)
                 Make_Equle(ref X, ref Y);  // make Equle length         O(N)
                 int x_size = Even_Length(ref X); // check if has even length of Divide equal      //O(N)
@@ -140,23 +139,23 @@ namespace RSA_Algo
                 Divide_into2Array(ref y1, ref y2, ref Y, size_of_sub_prob);    //O(N)
                 if (N == 2)  //Base Case     //O()
                 {
-                    a = x1[0] * y1[0];
-                    c = x2[0] * y2[0];
-                    z = (x1[0] + x2[0]) * (y1[0] + y2[0]);
-                    b = z - (a + c);
+                    a = x1[0] * y1[0];   //O(1)
+                c = x2[0] * y2[0];   //O(1)
+                z = (x1[0] + x2[0]) * (y1[0] + y2[0]);   //O(1)
+                b = z - (a + c);   //O(1)
 
-                    result_baseCase = (a * Ten_power(2)) + c + (b * Ten_power(1));  //O(N)
+                result_baseCase = (a * Ten_power(2)) + c + (b * Ten_power(1));  //O(N)
                     string Res = result_baseCase.ToString();  //O(1)
                     return convert_CharArr_IntArr(Res.ToCharArray());   //O(N)*O(1) =O(N)
 
                 }  // Divide And Conqure
 
-                A = Multiply(x1, y1);
-                C = Multiply(x2, y2);
+                A = Multiply(x1, y1);    //O(N^1.5)
+                C = Multiply(x2, y2);   //O(N^1.5)
                 Zx = ADD(x1, x2);  //O(N)
                 Zy = ADD(y1, y2);  //O(N)
-                Z = Multiply(Zx, Zy);
-                // B = SUB(Z, ADD(A, C));
+                Z = Multiply(Zx, Zy);    //O(N^1.5)
+                 // B = SUB(Z, ADD(A, C));
                 AC = ADD(A, C);   //O(N)
                 B = SUB(Z, AC);  //O(N)
 
@@ -173,7 +172,7 @@ namespace RSA_Algo
                 AC = ADD(A, C);       //O(N)
                 Result= ADD(AC, B);       //O(N)
             Remove_Zeros_FromLeft(ref Result);   //O(N)
-            return Result;
+            return Result;  //O(1)
                 //return Failed;
             }
             public static void Make_Equle(ref int[] X, ref int[] Y)    //O(N)
@@ -255,7 +254,7 @@ namespace RSA_Algo
                 int[] int_arr = new int[ch_arr.Length]; // O(1)
                 for (int i = 0; i < int_arr.Length; i++) // O(N)
                 {
-                    //int_arr[i] = Convert.ToInt32(ch_arr[i
+                    //int_arr[i] = Convert.ToInt32(ch_arr[i]);
                     string s = ch_arr[i].ToString();    //O(1)
                 int_arr[i] = Int32.Parse(s);    //O(1)
 
@@ -325,26 +324,26 @@ namespace RSA_Algo
             return false;  //O(1)
         }
         //Tuble.item1=Divide   | Tuble.item2=Reminder
-        public static Tuple<int[], int[]> div_mod(int[] arrA, int[] arrB)
+        public static Tuple<int[], int[]> div_mod(int[] arrA, int[] arrB) //T(N)=T(N)+O(N^1.5)    //O(N^1.5)
         { 
-            int[] zero = { 0 }, one = { 1 }, mul_By2 = { 2 };
-            int[] _result,_reminder;
-            Tuple<int[], int[]> Q_R;
+            int[] zero = { 0 }, one = { 1 }, mul_By2 = { 2 };  //O(1)
+            int[] _result,_reminder;   //O(1)
+            Tuple<int[], int[]> Q_R;  //O(1)
 
-            if (Compare(ref arrA , ref arrB))
-                return new Tuple<int[], int[]>(zero, arrA);
+            if (Compare(ref arrA , ref arrB))  //O(N)
+                return new Tuple<int[], int[]>(zero, arrA);  //O(1)
 
-            Q_R = div_mod(arrA,Multiply(arrB, mul_By2));
-            _result = Q_R.Item1;
-            _result = Multiply(_result, mul_By2);
-            _reminder = Q_R.Item2;
-            if (Compare(ref _reminder, ref arrB))
+            Q_R = div_mod(arrA,Multiply(arrB, mul_By2));  //O(N^1.5)  // Recursive
+            _result = Q_R.Item1;  //O(1)
+            _result = Multiply(_result, mul_By2);   //O(N^1.5)
+            _reminder = Q_R.Item2;  //O(1)
+            if (Compare(ref _reminder, ref arrB))    //O(N)
             {
-                return new Tuple<int[], int[]>(_result, _reminder);
+                return new Tuple<int[], int[]>(_result, _reminder);  //O(1)
             }
             else
             {
-                return new Tuple<int[], int[]>(ADD(_result, one), SUB(_reminder, arrB));
+                return new Tuple<int[], int[]>(ADD(_result, one), SUB(_reminder, arrB));   //O(N)
             }
         }
 
@@ -397,46 +396,50 @@ namespace RSA_Algo
         }
 
         #region Morgan_RSA(M_RSA)
-        public static int[] RSA(int[] _base, int[] pow, int[] mod)
+        public static int[] RSA(int[] _base, int[] pow, int[] mod) //T(N)=T(N/2)+O(N^1.5)   //O(N^1.5)
+               //Master Method Case 3    f(x)=O(N^1.5)  g(x)=N^(log 1 base 2) 
         {
-            Tuple<int[], int[]> tuple_pow,tuple_mod,tuple_res;
-            int[] zero = { 0 }, one = { 1 }, two = { 2 };
-            int[] Result,div_by2,remind;
+            //int count = 0;    //O(1)
+            //Console.Write(count++);   //O(1)
+            //Console.Clear();  //O(1)
+            Tuple<int[], int[]> tuple_pow,tuple_mod,tuple_res;    //O(1)
+            int[] zero = { 0 }, one = { 1 }, two = { 2 };     //O(1)
+            int[] Result,div_by2,remind;    //O(1)
 
-            tuple_mod = div_mod(_base, mod);  // Double used
+            tuple_mod = div_mod(_base, mod);  // Double used    //O(N^1.5)
 
-            if (pow.Length == 1 && pow[0] == 0)
+            if (pow.Length == 1 && pow[0] == 0)    //O(1)
             {
-                return one;
+                return one;  //O(1)
             }
-            else if (_base.Length == 1 && _base[0] == 0)
+            else if (_base.Length == 1 && _base[0] == 0)   //O(1)
             {
-                return zero;
+                return zero;   //O(1)
             }
-            else if (pow.Length == 1 && pow[0] == 1)
+            else if (pow.Length == 1 && pow[0] == 1)   //O(1)
             {
               //  tuble = div_mod(_base, mod);
-                return tuple_mod.Item2;
+                return tuple_mod.Item2;    //O(1)
             }
             else {
-                tuple_pow = div_mod(pow, two);
-                div_by2 = tuple_pow.Item1;
-                remind = tuple_pow.Item2;
-                if (remind.Length == 1 && remind[0] == 0)
+                tuple_pow = div_mod(pow, two);  //O(N^1.5)
+                div_by2 = tuple_pow.Item1;   //O(1)
+                remind = tuple_pow.Item2;   //O(1)
+                if (remind.Length == 1 && remind[0] == 0)   //O(1)
                 {
-                    Result = RSA(_base, div_by2, mod);
-                    Result = Multiply(Result, Result);
+                    Result = RSA(_base, div_by2, mod);   
+                    Result = Multiply(Result, Result);   //O(N^1.5)
                 }
                 else
                 {
-                    Result = RSA(_base, div_by2, mod);
-                    Result = Multiply(Result, Result);
-                    remind = tuple_mod.Item2;
-                    Result = Multiply(Result,remind);
+                    Result = RSA(_base, div_by2, mod);   
+                    Result = Multiply(Result, Result);  //O(N^1.5)
+                    remind = tuple_mod.Item2;   //O(1)
+                    Result = Multiply(Result,remind);   //O(N^1.5)
                 }
             }
-            tuple_res = div_mod(Result, mod);
-            return tuple_res.Item2;
+            tuple_res = div_mod(Result, mod); //O(N^1.5)
+            return tuple_res.Item2;   //O(1)
         }
         #endregion
         //Convert_string_To_intArr
@@ -476,24 +479,24 @@ namespace RSA_Algo
             return arr;   //O(1)
         }
 
-        public static string convert_Ascii_To_String(int[] Arr)
+        public static string convert_Ascii_To_String(int[] Arr) 
         {
-            string Massage = "";
-            char ch;
-            int ch_ascii,rem;
+            string Massage = "";  //O(1)
+            char ch;  //O(1)
+            int ch_ascii,rem;   //O(1)
             //int[] three = { 3 }, rem;
-            rem = (Arr.Length % 3);
-            if (rem != 0)
+            rem = (Arr.Length % 3);   //O(1)
+            if (rem != 0)   //O(1)
             {
-                Add_Zero_onLeft(ref Arr,3-rem);
+                Add_Zero_onLeft(ref Arr,3-rem);  //O(N)
             }
-                for (int i = 0; i < Arr.Length; i += 3)
+                for (int i = 0; i < Arr.Length; i += 3)   //O(N)
                 {
-                    ch_ascii = (Arr[i] * 100) + (Arr[i + 1] * 10) + Arr[i + 2];
-                    ch = (char)ch_ascii;
-                    Massage += ch;
-                }
-            return Massage;
+                    ch_ascii = (Arr[i] * 100) + (Arr[i + 1] * 10) + Arr[i + 2]; //O(1)
+                ch = (char)ch_ascii;   //O(1)
+                Massage += ch;   //O(1)
+            }
+            return Massage;  //O(1)
         }
     }
 }
