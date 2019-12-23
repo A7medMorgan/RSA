@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RSA_Algo
 {
+    #region pair
     public class Pair<T, U>
     {
         public Pair()
@@ -21,13 +22,19 @@ namespace RSA_Algo
         public T First { get; set; }
         public U Second { get; set; }
     };
+    #endregion
 
     class BigInteger
     {
-        
-            // int s = (int)s1[0] - '0';
-            //:public
-            public string text;
+           // to convert to its ascci code
+        //char ch = '5';
+        //int i = (int)ch ;
+
+            // to convert char number  to int number
+        // int s = (int)s1[0] - '0';
+
+        //:public
+        public string text;
             public int[] pub_arr;
             //:private
             public static int[] ADD(int[] arr1, int[] arr2)   //O(N)
@@ -250,7 +257,7 @@ namespace RSA_Algo
                 {
                     //int_arr[i] = Convert.ToInt32(ch_arr[i
                     string s = ch_arr[i].ToString();    //O(1)
-                int_arr[i] = Int32.Parse(s);    //O(N)
+                int_arr[i] = Int32.Parse(s);    //O(1)
 
             }
                 return int_arr;   //O(1)
@@ -432,8 +439,61 @@ namespace RSA_Algo
             return tuple_res.Item2;
         }
         #endregion
+        //Convert_string_To_intArr
+        public static int[] AsciiCode(string Message)  // N * O(1) = O(N)
+        {
+            //string s;
+            int j = 0,ascii,mod1,mod2;    //O(1)
+            char[] _m = Message.ToCharArray();   //O(N)
+            int[] arr = new int[_m.Length * 3];   //O(1)
+
+            for (int i = 0; i < arr.Length; i+=3)   //O(N)
+            {
+                //s= _m[j].ToString();
+                ascii = (int)_m[j];   //O(1)
+                //ascii = int.Parse(s);
+                if (ascii < 100)    //O(1)
+                {
+                    mod1 = ascii % 10;      //O(1)
+                    ascii = ascii / 10;    //O(1)
+                    arr[i] = 0;    //O(1)
+                    arr[i + 1] = ascii;    //O(1)
+                    arr[i + 2] = mod1;     //O(1)
+                }
+                //O(1)
+                else
+                {
+                    mod1 = ascii % 10;   //O(1)
+                    ascii = ascii / 10;   //O(1)
+                    mod2 =ascii% 10;     //O(1)
+                    ascii = ascii / 10;    //O(1)
+                    arr[i] = ascii;    //O(1)
+                    arr[i + 1] = mod2;    //O(1)
+                    arr[i + 2] = mod1;    //O(1)
+                }
+                j++;    //O(1)
+            }
+            return arr;   //O(1)
+        }
+
+        public static string convert_Ascii_To_String(int[] Arr)
+        {
+            string Massage = "";
+            char ch;
+            int ch_ascii,rem;
+            //int[] three = { 3 }, rem;
+            rem = (Arr.Length % 3);
+            if (rem != 0)
+            {
+                Add_Zero_onLeft(ref Arr,3-rem);
+            }
+                for (int i = 0; i < Arr.Length; i += 3)
+                {
+                    ch_ascii = (Arr[i] * 100) + (Arr[i + 1] * 10) + Arr[i + 2];
+                    ch = (char)ch_ascii;
+                    Massage += ch;
+                }
+            return Massage;
+        }
     }
 }
-        
-    
-

@@ -10,10 +10,29 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
-           
-            SimpleTest();
-
+            test_String_Bouns1();
             //MileStone1();
+        }
+        static void test_String_Bouns1()
+        {
+            string e = "17", d = "281393";
+            // int[] m = BigInteger.Convert_string_To_intArr("33");
+            string m = "Iu";
+            // BigInteger.Display(m);
+            Console.WriteLine("m\t" + m);
+
+            int[] a = BigInteger.AsciiCode(m);
+            string result = string.Join(string.Empty, a);
+            int[] arr = SimpleTest(result, e);
+
+            Console.WriteLine("Decrypte");
+            result = string.Join(string.Empty, arr);
+
+            arr = SimpleTest(result, d);
+
+            result = BigInteger.convert_Ascii_To_String(arr);
+            Console.WriteLine(result);
+
         }
         #region MileStone1
         static void MileStone1()
@@ -152,25 +171,26 @@ namespace RSA_Algo
             }
         #endregion
         #region Test
-        static void SimpleTest()
+        static int[] SimpleTest(string _M , string _e_d)
         {
-            string m = "2";
-            string e = "5", d = "11";
-            string n = "14";
-
+            string m = _M;
+            
+            string n = "300217";
+            Console.WriteLine("Massage \t"+m);
             int[] M = BigInteger.convert_CharArr_IntArr(m.ToCharArray());
-            int[] E = BigInteger.convert_CharArr_IntArr(e.ToCharArray());
-            int[] D = BigInteger.convert_CharArr_IntArr(d.ToCharArray());
+            int[] E_D = BigInteger.convert_CharArr_IntArr(_e_d.ToCharArray());
             int[] N = BigInteger.convert_CharArr_IntArr(n.ToCharArray());
 
-            int[] E_M = BigInteger.RSA(M, E, N);
+            int[] E_M = BigInteger.RSA(M, E_D, N);
 
+            Console.Write("Eencryption(M)\t");
             foreach (int i in E_M)
             {
 
                 Console.Write(i);
             }
             Console.WriteLine();
+            return E_M;
         }
         #endregion
     }
