@@ -16,11 +16,13 @@ namespace RSA_Algo
             {
               string[] result=  File_RSA(File.file_simple_rsa);
               File.writeToFile(File.file_simple_rsa_output, result);
+              Console.WriteLine("save success");
             }
             else if (x == 2)
             {
                 string[] result = File_RSA(File.file_complete_rsa);
                 File.writeToFile(File.file_complete_rsa_output, result);
+                Console.WriteLine("save success");
             }
             else
             {
@@ -81,10 +83,12 @@ namespace RSA_Algo
                 //start time
                 sw.Start();
                     int[] Encrypted_m = BigInteger.RSA(_M, _E, _N);
+                    // convert array of integer to string to save in file
                     string result = string.Join(string.Empty, Encrypted_m);
                     output[w] = result;
                 //Encrypte
                     int[] Decrypted_m = BigInteger.RSA(_EM, _D, _N);
+                    // convert array of integer to string to save in file
                     string result1 = string.Join(string.Empty, Decrypted_m);
                     output[z] = result1;
                 //Decrypte
@@ -95,6 +99,7 @@ namespace RSA_Algo
                 Console.WriteLine("TickTime Test: "+ type2 / 8+"  " + sw.Elapsed);
                 n1 += 8; e += 8;m += 8;n2 += 8;d += 8;Em += 8;type1 += 8;type2 += 8;
                 }
+            //array of string 
                 return output;
                
             //Stop test
