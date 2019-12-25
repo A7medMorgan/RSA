@@ -13,9 +13,15 @@ namespace RSA_Algo
             Console.WriteLine("Choose test to Start (simple 1 , complete 2,Enter special Massage 3)");
             int x = Convert.ToInt32(Console.ReadLine());
             if (x == 1)
-                File_RSA(File.file_simple_rsa);
+            {
+              string[] result=  File_RSA(File.file_simple_rsa);
+              File.writeToFile(File.file_simple_rsa_output, result);
+            }
             else if (x == 2)
-                File_RSA(File.file_complete_rsa);
+            {
+                string[] result = File_RSA(File.file_complete_rsa);
+                File.writeToFile(File.file_complete_rsa_output, result);
+            }
             else
             {
                 string _n = "3658315382137043";
@@ -24,29 +30,29 @@ namespace RSA_Algo
 
             Replay_Massage: Console.WriteLine("Choose 1 to encrypte massage  2 for decrypte");
                 x = Convert.ToInt32(Console.ReadLine());
-                 if (x == 1)
+                if (x == 1)
                 {
                     Console.WriteLine("Enter the Massage Less than 5 character");
                     string M = Console.ReadLine();
-                     int[] Massage = BigInteger.AsciiCode(M);
-                    Console.WriteLine("N =" + _n +" || "+ "E =" + e);
-                    E_Massage(Massage, e, _n,1);
+                    int[] Massage = BigInteger.AsciiCode(M);
+                    Console.WriteLine("N =" + _n + " || " + "E =" + e);
+                    E_Massage(Massage, e, _n, 1);
                 }
-                else if(x==2)
+                else if (x == 2)
                 {
                     Console.WriteLine("Enter the Encrypted Massage ");
                     string M = Console.ReadLine();
                     int[] M_arr = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
-                    Console.WriteLine("N =" + _n +" || "+ "E =" + d);
+                    Console.WriteLine("N =" + _n + " || " + "E =" + d);
                     E_Massage(M_arr, d, _n, 0);
                 }
-                 else
-                goto Replay_Massage;
+                else
+                    goto Replay_Massage;
             }
             Retry();
             ////MileStone1();
         }
-        public static void File_RSA(string FileName)
+        public static string[] File_RSA(string FileName)
         {
             Stopwatch sw,Alltest;
             string N,M,EM,E,D;
@@ -57,6 +63,8 @@ namespace RSA_Algo
             //start test
             Alltest=new Stopwatch();
             Alltest.Start();
+            int w=0,z=1;
+            string[] output = new string[num];
                 for (int i = 0; i < num/2; i++)
                 {
                     N = lines[n1];
@@ -73,14 +81,22 @@ namespace RSA_Algo
                 //start time
                 sw.Start();
                     int[] Encrypted_m = BigInteger.RSA(_M, _E, _N);
+                    string result = string.Join(string.Empty, Encrypted_m);
+                    output[w] = result;
                 //Encrypte
                     int[] Decrypted_m = BigInteger.RSA(_EM, _D, _N);
+                    string result1 = string.Join(string.Empty, Decrypted_m);
+                    output[z] = result1;
                 //Decrypte
                 sw.Stop();
                 //stop time
+                w+=2;
+                z+=2;
                 Console.WriteLine("TickTime Test: "+ type2 / 8+"  " + sw.Elapsed);
                 n1 += 8; e += 8;m += 8;n2 += 8;d += 8;Em += 8;type1 += 8;type2 += 8;
                 }
+                return output;
+               
             //Stop test
             Alltest.Stop();
             Console.WriteLine("TickTime Test of : " + FileName +"  "+ Alltest.Elapsed);
