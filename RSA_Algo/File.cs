@@ -18,6 +18,8 @@ namespace RSA_Algo
         public static string file_complete_rsa = "./../../../Complete Test/TestRSA.txt";
         public static string file_simple_rsa_output = "./../../../SampleRSA_II/SampleRSA_output.txt";
         public static string file_complete_rsa_output = "./../../../Complete Test/TestRSA_output.txt";
+        public static string file_simple_rsa_output_time = "./../../../SampleRSA_II/SampleRSA_output_time.txt";
+        public static string file_complete_rsa_output_time = "./../../../Complete Test/TestRSA_output_time.txt";
 
         // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.
         // You can modify the path if necessary.

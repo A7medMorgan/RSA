@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//Ahmed Morgan
+//Islame Nasser
+//Amir Tateq
+//Ahmed Saeed
+//Zead Mmdoah
 namespace RSA_Algo
 {
     #region pair

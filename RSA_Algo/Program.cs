@@ -34,7 +34,7 @@ namespace RSA_Algo
                 x = Convert.ToInt32(Console.ReadLine());
                 if (x == 1)
                 {
-                    Console.WriteLine("Enter the Massage Less than 5 character");
+                    Console.WriteLine("Enter the Massage Less than 4 character");
                     string M = Console.ReadLine();
                     int[] Massage = BigInteger.AsciiCode(M);
                     Console.WriteLine("N =" + _n + " || " + "E =" + e);
@@ -45,7 +45,7 @@ namespace RSA_Algo
                     Console.WriteLine("Enter the Encrypted Massage ");
                     string M = Console.ReadLine();
                     int[] M_arr = BigInteger.convert_CharArr_IntArr(M.ToCharArray());
-                    Console.WriteLine("N =" + _n + " || " + "E =" + d);
+                    Console.WriteLine("N =" + _n + " || " + "D =" + d);
                     E_Massage(M_arr, d, _n, 0);
                 }
                 else
@@ -60,7 +60,8 @@ namespace RSA_Algo
             string N,M,EM,E,D;
                 string[] lines = File.readFromFile(FileName);
                 int num = Convert.ToInt32(lines[0]);
-                
+            string[] time = new string[(num / 2)+1];
+            string _time;
                 int n1 = 1, e = 2, m = 3, type1 = 4,n2=5,d=6,Em=7,type2=8;
             //start test
             Alltest=new Stopwatch();
@@ -97,15 +98,21 @@ namespace RSA_Algo
                 w+=2;
                 z+=2;
                 Console.WriteLine("TickTime Test: "+ type2 / 8+"  " + sw.Elapsed);
+                _time = sw.Elapsed.ToString();
+                time[i] = ("TickTime Test: " + type2 / 8 + "  " + _time).ToString();
                 n1 += 8; e += 8;m += 8;n2 += 8;d += 8;Em += 8;type1 += 8;type2 += 8;
                 }
-            //array of string 
-                return output;
-               
             //Stop test
             Alltest.Stop();
             Console.WriteLine("TickTime Test of : " + FileName +"  "+ Alltest.Elapsed);
+            time[num / 2] = ("TickTime Test of : " + FileName + "  " + Alltest.Elapsed).ToString();
 
+            if (FileName.Equals(File.file_simple_rsa))
+                File.writeToFile(File.file_simple_rsa_output_time, time);
+            else
+                File.writeToFile(File.file_complete_rsa_output_time,time);
+            //array of string 
+            return output;
         }
         public static void E_Massage(int[] Massage, string E_D, string N,int type)
         {
