@@ -93,7 +93,101 @@ namespace RSA_Algo
                 Remove_Zeros_FromLeft(ref R);   //O(1)
             return R;  //O(1)
             }
-            public static void Display(int[] Num) //O(N)
+
+         public static int[] Multiply(int[] X, int[] Y)    //T(N)=3T(N/2)+O(N)    Master Method  case 1     F(n)=O(N)    g(x)=N^log3 base(2)
+                                                          //Complexity  ==  O(N^1.59)
+        {
+            // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
+            int[] Failed = { 0 }; //O(1)
+            int size_of_sub_prob, N; //O(1)
+                                     // 10^n[A]+[C]+[B]10^n/2                              // Karatsuba Multiplication
+            int[] A // [X1Y1]
+                , C // [X2Y2]
+                , B // Z-(A+C)
+                , Z, Zx, Zy// [X1+X2][Y1+Y2]
+                , AC
+                , Result;  //O(1)
+            int a, c, b, z, result_baseCase;    //O(1)
+            int[] x1, x2      //O(1)
+                , y1, y2;      //O(1)
+            Make_Equle(ref X, ref Y);  // make Equle length         O(N)
+            int x_size = Even_Length(ref X); // check if has even length of Divide equal      //O(N)
+            int y_size = Even_Length(ref Y); // ~      //O(N)
+            N = X.Length; // set N    O(1)
+
+            if (x_size == y_size) size_of_sub_prob = x_size; //O(1)
+            else { return Failed; }   //O(1)
+
+            x1 = new int[size_of_sub_prob];    //O(1)
+            x2 = new int[size_of_sub_prob];    //O(1)
+            y1 = new int[size_of_sub_prob];   //O(N)
+            y2 = new int[size_of_sub_prob];    //O(N)
+
+            Divide_into2Array(ref x1, ref x2, ref X, size_of_sub_prob);   //O(N)
+            Divide_into2Array(ref y1, ref y2, ref Y, size_of_sub_prob);    //O(N)
+            if (N == 2)  //Base Case     //O()
+            {
+                a = x1[0] * y1[0];   //O(1)
+                c = x2[0] * y2[0];   //O(1)
+                z = (x1[0] + x2[0]) * (y1[0] + y2[0]);   //O(1)
+                b = z - (a + c);   //O(1)
+
+                result_baseCase = (a * Ten_power(2)) + c + (b * Ten_power(1));  //O(N)
+                string Res = result_baseCase.ToString();  //O(1)
+                return convert_CharArr_IntArr(Res.ToCharArray());   //O(N)*O(1) =O(N)
+
+            }  // Divide And Conqure
+
+            A = Multiply(x1, y1);    //O(N^1.5)
+            C = Multiply(x2, y2);   //O(N^1.5)
+            Zx = ADD(x1, x2);  //O(N)
+            Zy = ADD(y1, y2);  //O(N)
+            Z = Multiply(Zx, Zy);    //O(N^1.5)
+                                     // B = SUB(Z, ADD(A, C));
+            AC = ADD(A, C);   //O(N)
+            B = SUB(Z, AC);  //O(N)
+
+            //Zx = Multiply_Morgan(x1, y2);  // X1*Y2  + X2*Y1
+            //Zy = Multiply_Morgan(x2, y1);
+            //Make_Equle(ref Zx, ref Zy);
+            //Z = ADD(Zx, Zy);
+
+            // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
+
+            Append_Zeros(ref A, N);  // A 10^N          //O(N)
+            Append_Zeros(ref B, N / 2); // B 10^N/2       //O(N)
+
+            AC = ADD(A, C);       //O(N)
+            Result = ADD(AC, B);       //O(N)
+            Remove_Zeros_FromLeft(ref Result);   //O(N)
+            return Result;  //O(1)
+                            //return Failed;
+        }
+       
+        //Tuble.item1=Divide   | Tuble.item2=Reminder
+        public static Tuple<int[], int[]> div_mod(int[] arrA, int[] arrB) //T(N)=T(N)+O(N^1.5)    //O(N^1.5)
+        {
+            int[] zero = { 0 }, one = { 1 }, mul_By2 = { 2 };  //O(1)
+            int[] _result, _reminder;   //O(1)
+            Tuple<int[], int[]> Q_R;  //O(1)
+
+            if (Compare(ref arrA, ref arrB))  //O(N)
+                return new Tuple<int[], int[]>(zero, arrA);  //O(1)
+
+            Q_R = div_mod(arrA, Multiply(arrB, mul_By2));  //O(N^1.5)  // Recursive
+            _result = Q_R.Item1;  //O(1)
+            _result = Multiply(_result, mul_By2);   //O(N^1.5)
+            _reminder = Q_R.Item2;  //O(1)
+            if (Compare(ref _reminder, ref arrB))    //O(N)
+            {
+                return new Tuple<int[], int[]>(_result, _reminder);  //O(1)
+            }
+            else
+            {
+                return new Tuple<int[], int[]>(ADD(_result, one), SUB(_reminder, arrB));   //O(N)
+            }
+        }
+        public static void Display(int[] Num) //O(N)
             {
                 foreach (int n in Num) //O(N)
                 {
@@ -110,75 +204,7 @@ namespace RSA_Algo
                 Console.WriteLine(); //O(1)
             }
 
-            public static int[] Multiply(int[] X, int[] Y)    //T(N)=3T(N/2)+O(N)    Master Method  case 1     F(n)=O(N)    g(x)=N^log3 base(2)
-                                                              //Complexity  ==  O(N^1.59)
-            {
-                // 10^n[X1Y1]+[X2Y2]+([X1+X2][Y1+Y2])10^n/2
-                int[] Failed = { 0 }; //O(1)
-                int size_of_sub_prob, N; //O(1)
-                                         // 10^n[A]+[C]+[B]10^n/2                              // Karatsuba Multiplication
-            int[] A // [X1Y1]
-                , C // [X2Y2]
-                , B // Z-(A+C)
-                , Z, Zx, Zy// [X1+X2][Y1+Y2]
-                , AC
-                , Result;  //O(1)
-                int a, c, b, z, result_baseCase;    //O(1)
-                int[] x1, x2      //O(1)
-                    , y1, y2;      //O(1)
-                Make_Equle(ref X, ref Y);  // make Equle length         O(N)
-                int x_size = Even_Length(ref X); // check if has even length of Divide equal      //O(N)
-                int y_size = Even_Length(ref Y); // ~      //O(N)
-                N = X.Length; // set N    O(1)
-
-                if (x_size == y_size) size_of_sub_prob = x_size; //O(1)
-                else { return Failed; }   //O(1)
-
-                x1 = new int[size_of_sub_prob];    //O(1)
-                x2 = new int[size_of_sub_prob];    //O(1)
-                y1 = new int[size_of_sub_prob];   //O(N)
-                y2 = new int[size_of_sub_prob];    //O(N)
-
-                Divide_into2Array(ref x1, ref x2, ref X, size_of_sub_prob);   //O(N)
-                Divide_into2Array(ref y1, ref y2, ref Y, size_of_sub_prob);    //O(N)
-                if (N == 2)  //Base Case     //O()
-                {
-                    a = x1[0] * y1[0];   //O(1)
-                c = x2[0] * y2[0];   //O(1)
-                z = (x1[0] + x2[0]) * (y1[0] + y2[0]);   //O(1)
-                b = z - (a + c);   //O(1)
-
-                result_baseCase = (a * Ten_power(2)) + c + (b * Ten_power(1));  //O(N)
-                    string Res = result_baseCase.ToString();  //O(1)
-                    return convert_CharArr_IntArr(Res.ToCharArray());   //O(N)*O(1) =O(N)
-
-                }  // Divide And Conqure
-
-                A = Multiply(x1, y1);    //O(N^1.5)
-                C = Multiply(x2, y2);   //O(N^1.5)
-                Zx = ADD(x1, x2);  //O(N)
-                Zy = ADD(y1, y2);  //O(N)
-                Z = Multiply(Zx, Zy);    //O(N^1.5)
-                 // B = SUB(Z, ADD(A, C));
-                AC = ADD(A, C);   //O(N)
-                B = SUB(Z, AC);  //O(N)
-
-                //Zx = Multiply_Morgan(x1, y2);  // X1*Y2  + X2*Y1
-                //Zy = Multiply_Morgan(x2, y1);
-                //Make_Equle(ref Zx, ref Zy);
-                //Z = ADD(Zx, Zy);
-
-                // return ADD(ADD(Append_Zeros(ref A,A.Length+N),C),Append_Zeros(ref Z,Z.Length+N/2));  //  combine
-
-                Append_Zeros(ref A, N);  // A 10^N          //O(N)
-                Append_Zeros(ref B, N / 2); // B 10^N/2       //O(N)
-
-                AC = ADD(A, C);       //O(N)
-                Result= ADD(AC, B);       //O(N)
-            Remove_Zeros_FromLeft(ref Result);   //O(N)
-            return Result;  //O(1)
-                //return Failed;
-            }
+            
             public static void Make_Equle(ref int[] X, ref int[] Y)    //O(N)
             {
                 if (X.Length != Y.Length)  //O(1)
@@ -253,18 +279,7 @@ namespace RSA_Algo
             }
                 return len1; // If len1 >= len2     //O(1)
         }
-            public static int[] convert_CharArr_IntArr(char[] ch_arr) //O(N)
-            {
-                int[] int_arr = new int[ch_arr.Length]; // O(1)
-                for (int i = 0; i < int_arr.Length; i++) // O(N)
-                {
-                    //int_arr[i] = Convert.ToInt32(ch_arr[i]);
-                    string s = ch_arr[i].ToString();    //O(1)
-                int_arr[i] = Int32.Parse(s);    //O(1)
-
-            }
-                return int_arr;   //O(1)
-        }
+           
             public static int Ten_power(int N)   //T(N)=T(N-1)+O(1)     // O(N)
             {
                 if (N == 0) return 1;    //O(1)
@@ -327,125 +342,7 @@ namespace RSA_Algo
             }
             return false;  //O(1)
         }
-        //Tuble.item1=Divide   | Tuble.item2=Reminder
-        public static Tuple<int[], int[]> div_mod(int[] arrA, int[] arrB) //T(N)=T(N)+O(N^1.5)    //O(N^1.5)
-        { 
-            int[] zero = { 0 }, one = { 1 }, mul_By2 = { 2 };  //O(1)
-            int[] _result,_reminder;   //O(1)
-            Tuple<int[], int[]> Q_R;  //O(1)
 
-            if (Compare(ref arrA , ref arrB))  //O(N)
-                return new Tuple<int[], int[]>(zero, arrA);  //O(1)
-
-            Q_R = div_mod(arrA,Multiply(arrB, mul_By2));  //O(N^1.5)  // Recursive
-            _result = Q_R.Item1;  //O(1)
-            _result = Multiply(_result, mul_By2);   //O(N^1.5)
-            _reminder = Q_R.Item2;  //O(1)
-            if (Compare(ref _reminder, ref arrB))    //O(N)
-            {
-                return new Tuple<int[], int[]>(_result, _reminder);  //O(1)
-            }
-            else
-            {
-                return new Tuple<int[], int[]>(ADD(_result, one), SUB(_reminder, arrB));   //O(N)
-            }
-        }
-
-        public static Tuple<int, int> div_mod(int A, int B)  //O(N)
-        {
-
-            int q, r;   //O(1)
-
-            Tuple<int, int> Q_R; //O(1)
-            if (A < B)  //O(1)
-                return new Tuple<int, int>(0, A); //O(1)
-
-            Q_R = div_mod(A, B * 2);  //O(N)
-            q = Q_R.Item1; //O(1)
-            q = q * 2;  //O(1)
-            r = Q_R.Item2;  //O(1)
-            if (r < B)  //O(1)
-                return new Tuple<int, int>(q, r);   //O(1)
-            else
-                return new Tuple<int, int>(q + 1, r - B);   //O(1)
-
-        }
-        public static int Modular_Division(int _base, int pow, int mod)   //O(logN)
-        {        //T(N)=T(N/2)+O(1)     Master Method case 2  F(n)=O(1)  g(x)=N^(log 1 base 2)  =  O(1*log(N))
-            int Result;  //O(1)
-            if (pow == 0)    //O(1)
-                return 1;     //O(1)
-            else if (_base == 0)      //O(1)
-            {
-                return 0;     //O(1)
-            }
-            else if (pow == 1)     //O(1)
-            {
-                return _base % mod;   //O(1)
-            }
-            else
-            {
-                if (pow % 2 == 0)   //O(1)
-                {
-                    Result = Modular_Division(_base, pow / 2, mod);  //T(N/2)
-                    Result = (Result * Result);    //O(1)
-                }
-                else
-                {
-                    Result = Modular_Division(_base, pow / 2, mod);   //T(N/2)
-                    Result = (Result * Result * (_base % mod));      //O(1)
-                }
-            }
-            return Result % mod;   //O(1)
-        }
-
-        #region Morgan_RSA(M_RSA)
-        public static int[] RSA(int[] _base, int[] pow, int[] mod) //T(N)=T(N/2)+O(N^1.5)   //O(N^1.5)
-               //Master Method Case 3    f(x)=O(N^1.5)  g(x)=N^(log 1 base 2) 
-        {
-            //int count = 0;    //O(1)
-            //Console.Write(count++);   //O(1)
-            //Console.Clear();  //O(1)
-            Tuple<int[], int[]> tuple_pow,tuple_mod,tuple_res;    //O(1)
-            int[] zero = { 0 }, one = { 1 }, two = { 2 };     //O(1)
-            int[] Result,div_by2,remind;    //O(1)
-
-            tuple_mod = div_mod(_base, mod);  // Double used    //O(N^1.5)
-
-            if (pow.Length == 1 && pow[0] == 0)    //O(1)
-            {
-                return one;  //O(1)
-            }
-            else if (_base.Length == 1 && _base[0] == 0)   //O(1)
-            {
-                return zero;   //O(1)
-            }
-            else if (pow.Length == 1 && pow[0] == 1)   //O(1)
-            {
-              //  tuble = div_mod(_base, mod);
-                return tuple_mod.Item2;    //O(1)
-            }
-            else {
-                tuple_pow = div_mod(pow, two);  //O(N^1.5)
-                div_by2 = tuple_pow.Item1;   //O(1)
-                remind = tuple_pow.Item2;   //O(1)
-                if (remind.Length == 1 && remind[0] == 0)   //O(1)
-                {
-                    Result = RSA(_base, div_by2, mod);   
-                    Result = Multiply(Result, Result);   //O(N^1.5)
-                }
-                else
-                {
-                    Result = RSA(_base, div_by2, mod);   
-                    Result = Multiply(Result, Result);  //O(N^1.5)
-                    remind = tuple_mod.Item2;   //O(1)
-                    Result = Multiply(Result,remind);   //O(N^1.5)
-                }
-            }
-            tuple_res = div_mod(Result, mod); //O(N^1.5)
-            return tuple_res.Item2;   //O(1)
-        }
-        #endregion
         //Convert_string_To_intArr
         public static int[] AsciiCode(string Message)  // N * O(1) = O(N)
         {
@@ -501,6 +398,113 @@ namespace RSA_Algo
                 Massage += ch;   //O(1)
             }
             return Massage;  //O(1)
+        }
+        public static int[] convert_CharArr_IntArr(char[] ch_arr) //O(N)
+        {
+            int[] int_arr = new int[ch_arr.Length]; // O(1)
+            for (int i = 0; i < int_arr.Length; i++) // O(N)
+            {
+                //int_arr[i] = Convert.ToInt32(ch_arr[i]);
+                string s = ch_arr[i].ToString();    //O(1)
+                int_arr[i] = Int32.Parse(s);    //O(1)
+
+            }
+            return int_arr;   //O(1)
+        }
+        #region Morgan_RSA(M_RSA)
+        public static int[] RSA(int[] _base, int[] pow, int[] mod) //T(N)=T(N/2)+O(N^1.5)   //O(N^1.5)
+                                                                   //Master Method Case 3    f(x)=O(N^1.5)  g(x)=N^(log 1 base 2) 
+        {
+            //int count = 0;    //O(1)
+            //Console.Write(count++);   //O(1)
+            //Console.Clear();  //O(1)
+            Tuple<int[], int[]> tuple_pow, tuple_mod, tuple_res;    //O(1)
+            int[] zero = { 0 }, one = { 1 }, two = { 2 };     //O(1)
+            int[] Result, div_by2, remind;    //O(1)
+
+            tuple_mod = div_mod(_base, mod);  // Double used    //O(N^1.5)
+
+            if (pow.Length == 1 && pow[0] == 0)    //O(1)
+            {
+                return one;  //O(1)
+            }
+            else if (_base.Length == 1 && _base[0] == 0)   //O(1)
+            {
+                return zero;   //O(1)
+            }
+            else if (pow.Length == 1 && pow[0] == 1)   //O(1)
+            {
+                //  tuble = div_mod(_base, mod);
+                return tuple_mod.Item2;    //O(1)
+            }
+            else
+            {
+                tuple_pow = div_mod(pow, two);  //O(N^1.5)
+                div_by2 = tuple_pow.Item1;   //O(1)
+                remind = tuple_pow.Item2;   //O(1)
+                if (remind.Length == 1 && remind[0] == 0)   //O(1)
+                {
+                    Result = RSA(_base, div_by2, mod);
+                    Result = Multiply(Result, Result);   //O(N^1.5)
+                }
+                else
+                {
+                    Result = RSA(_base, div_by2, mod);
+                    Result = Multiply(Result, Result);  //O(N^1.5)
+                    remind = tuple_mod.Item2;   //O(1)
+                    Result = Multiply(Result, remind);   //O(N^1.5)
+                }
+            }
+            tuple_res = div_mod(Result, mod); //O(N^1.5)
+            return tuple_res.Item2;   //O(1)
+        }
+        #endregion
+        public static Tuple<int, int> div_mod(int A, int B)  //O(N)
+        {
+
+            int q, r;   //O(1)
+
+            Tuple<int, int> Q_R; //O(1)
+            if (A < B)  //O(1)
+                return new Tuple<int, int>(0, A); //O(1)
+
+            Q_R = div_mod(A, B * 2);  //O(N)
+            q = Q_R.Item1; //O(1)
+            q = q * 2;  //O(1)
+            r = Q_R.Item2;  //O(1)
+            if (r < B)  //O(1)
+                return new Tuple<int, int>(q, r);   //O(1)
+            else
+                return new Tuple<int, int>(q + 1, r - B);   //O(1)
+
+        }
+        public static int Modular_Division(int _base, int pow, int mod)   //O(logN)
+        {        //T(N)=T(N/2)+O(1)     Master Method case 2  F(n)=O(1)  g(x)=N^(log 1 base 2)  =  O(1*log(N))
+            int Result;  //O(1)
+            if (pow == 0)    //O(1)
+                return 1;     //O(1)
+            else if (_base == 0)      //O(1)
+            {
+                return 0;     //O(1)
+            }
+            else if (pow == 1)     //O(1)
+            {
+                return _base % mod;   //O(1)
+            }
+            else
+            {
+                if (pow % 2 == 0)   //O(1)
+                {
+                    Result = Modular_Division(_base, pow / 2, mod);  //T(N/2)
+                    Result = (Result * Result);    //O(1)
+                }
+                else
+                {
+                    Result = Modular_Division(_base, pow / 2, mod);   //T(N/2)
+                    Result = (Result * Result * (_base % mod));      //O(1)
+                }
+            }
+            return Result % mod;   //O(1)
         }
     }
 }
