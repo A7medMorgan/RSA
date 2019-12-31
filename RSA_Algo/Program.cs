@@ -10,13 +10,18 @@ namespace RSA_Algo
     {
         static void Main(string[] args)
         {
+            AlgoProjectMain();
+            ////MileStone1();
+        }
+        public static void AlgoProjectMain()
+        {
             Console.WriteLine("Choose test to Start (simple 1 , complete 2,Enter special Massage 3)");
             int x = Convert.ToInt32(Console.ReadLine());
             if (x == 1)
             {
-              string[] result=  File_RSA(File.file_simple_rsa);
-              File.writeToFile(File.file_simple_rsa_output, result);
-              Console.WriteLine("save success");
+                string[] result = File_RSA(File.file_simple_rsa);
+                File.writeToFile(File.file_simple_rsa_output, result);
+                Console.WriteLine("save success");
             }
             else if (x == 2)
             {
@@ -52,7 +57,6 @@ namespace RSA_Algo
                     goto Replay_Massage;
             }
             Retry();
-            ////MileStone1();
         }
         public static string[] File_RSA(string FileName)
         {

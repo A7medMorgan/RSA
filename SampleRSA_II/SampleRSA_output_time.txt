@@ -1,10 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+TickTime Test: 1  00:00:00.0073940
+TickTime Test: 2  00:00:00.0005291
+TickTime Test: 3  00:00:00.0000658
+TickTime Test: 4  00:00:00.0019086
+TickTime Test: 5  00:00:00.0010156
+TickTime Test of : ./../../../SampleRSA_II/SampleRSA.txt  00:00:00.0115961

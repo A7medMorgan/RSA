@@ -165,18 +165,26 @@ namespace RSA_Algo
         }
        
         //Tuble.item1=Divide   | Tuble.item2=Reminder
-        public static Tuple<int[], int[]> div_mod(int[] arrA, int[] arrB) //T(N)=T(N)+O(N^1.5)    //O(N^1.5)
+        public static Tuple<int[], int[]> div_mod(int[] arrA, int[] arrB)  //O(N^1.5)Optimized to //O(N)
         {
+                                                                     //T(N)=T(N)+O(N) 
             int[] zero = { 0 }, one = { 1 }, mul_By2 = { 2 };  //O(1)
-            int[] _result, _reminder;   //O(1)
+            int[] _result, _reminder,sumB,sumR;   //O(1)
             Tuple<int[], int[]> Q_R;  //O(1)
 
             if (Compare(ref arrA, ref arrB))  //O(N)
                 return new Tuple<int[], int[]>(zero, arrA);  //O(1)
-
-            Q_R = div_mod(arrA, Multiply(arrB, mul_By2));  //O(N^1.5)  // Recursive
+            
+            sumB = ADD(arrB, arrB);  //O(N)
+            Q_R = div_mod(arrA, sumB);   //Recursive
+                                    // Q_R = div_mod(arrA, Multiply(arrB, mul_By2));  //O(N^1.5)  // Recursive
+            
             _result = Q_R.Item1;  //O(1)
-            _result = Multiply(_result, mul_By2);   //O(N^1.5)
+                                   //_result = Multiply(_result, mul_By2);   //O(N^1.5)
+
+            sumR = ADD(_result, _result); //O(N)
+            _result = sumR; //O(1)
+
             _reminder = Q_R.Item2;  //O(1)
             if (Compare(ref _reminder, ref arrB))    //O(N)
             {
@@ -418,11 +426,11 @@ namespace RSA_Algo
             //int count = 0;    //O(1)
             //Console.Write(count++);   //O(1)
             //Console.Clear();  //O(1)
-            Tuple<int[], int[]> tuple_pow, tuple_mod, tuple_res;    //O(1)
+            Tuple<int[], int[]> tuple_pow, tuple_mod, tuple_res,tuple_mod_opt;    //O(1)
             int[] zero = { 0 }, one = { 1 }, two = { 2 };     //O(1)
             int[] Result, div_by2, remind;    //O(1)
 
-            tuple_mod = div_mod(_base, mod);  // Double used    //O(N^1.5)
+            tuple_mod = div_mod(_base, mod);  // Double used    //O(N)
 
             if (pow.Length == 1 && pow[0] == 0)    //O(1)
             {
@@ -439,23 +447,26 @@ namespace RSA_Algo
             }
             else
             {
-                tuple_pow = div_mod(pow, two);  //O(N^1.5)
+                tuple_pow = div_mod(pow, two);  //O(N)
                 div_by2 = tuple_pow.Item1;   //O(1)
                 remind = tuple_pow.Item2;   //O(1)
                 if (remind.Length == 1 && remind[0] == 0)   //O(1)
                 {
                     Result = RSA(_base, div_by2, mod);
-                    Result = Multiply(Result, Result);   //O(N^1.5)
+                    tuple_mod_opt = div_mod(Result, mod);
+                    Result = Multiply(tuple_mod_opt.Item2,tuple_mod_opt.Item2);   //O(N^1.5)
                 }
                 else
                 {
                     Result = RSA(_base, div_by2, mod);
-                    Result = Multiply(Result, Result);  //O(N^1.5)
+                    tuple_mod_opt = div_mod(Result, mod);
+
+                    Result = Multiply(tuple_mod_opt.Item2, tuple_mod_opt.Item2);  //O(N^1.5)
                     remind = tuple_mod.Item2;   //O(1)
                     Result = Multiply(Result, remind);   //O(N^1.5)
                 }
             }
-            tuple_res = div_mod(Result, mod); //O(N^1.5)
+            tuple_res = div_mod(Result, mod); //O(N)
             return tuple_res.Item2;   //O(1)
         }
         #endregion
